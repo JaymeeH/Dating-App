@@ -1,9 +1,10 @@
 import React from 'react';
 import { GoogleLogout } from 'react-google-login';
+import { refreshTokenSetup } from '../utils/refreshToken';
 
 require('dotenv').config()
 
-const clientId = process.env.CLIENT_ID;
+const clientId = process.env.REACT_APP_CLIENT_ID;
 
 const Logout = () => {
     const onSuccess = () => {

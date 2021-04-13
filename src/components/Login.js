@@ -1,13 +1,13 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 // initiallizing a refresh token
-//import { refreshTokenSetup } from '../utils/refreshToken';
+import { refreshTokenSetup } from '../utils/refreshToken';
 
 //Load the contents of .env variables
 require('dotenv').config()
 
 
-const clientId = process.env.CLIENT_ID;
+const clientId = process.env.REACT_APP_CLIENT_ID;
 
 
 
@@ -21,7 +21,7 @@ const Login = () => {
          );
    
      // initializing the setup  
-     //refreshTokenSetup(res)  
+     refreshTokenSetup(res)  
    };
    
    const onFailure = (res) => {

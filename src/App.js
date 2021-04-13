@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 
 function App() {
   return (
-    <UserProfileGrid />
+    <div>
+      <UserProfileGrid />
+    </div>
   );
 }
 

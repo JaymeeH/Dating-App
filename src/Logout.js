@@ -3,7 +3,7 @@ import { GoogleLogout } from 'react-google-login';
 
 require('dotenv').config()
 
-const clientId = process.env.CLIENT_ID;;
+const clientId = process.env.CLIENT_ID;
 
 const Logout = () => {
     const onSuccess = () => {

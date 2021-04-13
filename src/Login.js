@@ -6,11 +6,19 @@ import { GoogleLogin } from 'react-google-login';
 //Load the contents of .env variables
 require('dotenv').config()
 
+
 const clientId = process.env.CLIENT_ID;
+
+
+
+console.log(clientId)
 
 const Login = () => {
    const onSuccess = (res) => {
      console.log('[Login Success] currentUser:', res.profileObj);  
+     alert(
+         `Logged in successfully welcome ${res.profileObj.name} 😍  `
+         );
    
      // initializing the setup  
      //refreshTokenSetup(res)  

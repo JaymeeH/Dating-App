@@ -21,9 +21,27 @@ function UserProfileForm(props) {
   const genderRef = useRef(null);
   const bioRef = useRef(null);
 
+  const { email } = props;
+
   function saveUserProfile(nickName, age, gender, bio) {
   // pass
-
+    const profileInfo = {
+      email: 'test email',
+      nickname: nickName,
+      age,
+      gender,
+      bio,
+    };
+    console.log(profileInfo);
+    fetch('/api/v1/user_profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(profileInfo),
+    }).then((response) => response.json()).then((data) => {
+      console.log(data);
+    }); // need nothing cause sending
   }
 
   function findMatch() {
@@ -61,7 +79,7 @@ function UserProfileForm(props) {
             <Form.Label>Gender</Form.Label>
             <Form.Control ref={genderRef} as="select" defaultValue="Choose...">
               <option>Male</option>
-              <option>Female.</option>
+              <option>Female</option>
               <option>Non-Binary</option>
             </Form.Control>
           </Form.Group>
@@ -77,7 +95,7 @@ function UserProfileForm(props) {
       </Form.Row>
       <Form.Row className="justify-content-md-center">
         <Col xs={3}>
-          <Button variant="success" onClick={() => saveUserProfile(nickNameRef.current, ageRef.current, genderRef.current, bioRef.current)}>
+          <Button variant="success" onClick={() => saveUserProfile(nickNameRef.current.value, ageRef.current.value, genderRef.current.value, bioRef.current.value)}>
             Save Profile
           </Button>
         </Col>

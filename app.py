@@ -21,10 +21,13 @@ def user_profile():
     '''
     if request.method == 'POST':
         # Write data to DB
-        return
+        request_data = request.get_json()
+        print(request_data)
+        return {'success': True}
     else:
         # Get data from DB
-        return
+        return {'success': True}
+    return {'success': False}
 
 
 app.run(

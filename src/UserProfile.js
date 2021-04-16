@@ -60,7 +60,7 @@ function UserProfileForm(props) {
       },
       body: JSON.stringify(json_packed_data)
     }).then((response) => response.json()).then((data) => {
-      console.log('All good')
+      console.log('All good');
     });
   }
 

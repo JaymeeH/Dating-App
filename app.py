@@ -40,12 +40,6 @@ def user_profile():
                 #'bio': 'A person',
             }
             return mock_data
-        elif 'name' in request.args and ('gender' in request.args):
-            # Case:
-            return {
-                'name': request.args['name'],
-                'gender': request.args['gender']
-            }
         else:
             return {'success': False, 'error': 'Invalid request arguments'}
     return {

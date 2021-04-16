@@ -24,6 +24,7 @@ function UserProfileForm(props) {
 
   const { email } = props;
   const PROFILE_REQUEST_URL = '/api/v1/user_profile';
+  const MATCH_URL = 'api/v1/match';
 
   function saveUserProfile(nickName, age, gender, bio) {
   // Send to server
@@ -47,7 +48,20 @@ function UserProfileForm(props) {
 
   function findMatch(gender, name) {
     // Send to server
-
+    const json_packed_data = {
+      'name': name,
+      'gender': gender
+    }
+    
+    fetch(MATCH_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(json_packed_data)
+    }).then((response) => response.json()).then((data) => {
+      console.log('All good')
+    });
   }
 
   function loadData(userEmail) {

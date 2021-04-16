@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Container, Row, Col, Form, Button,
 } from 'react-bootstrap';
@@ -16,15 +16,17 @@ function UserProfileGrid(props) {
 }
 
 function UserProfileForm(props) {
+  const googleNameRef = useRef(null);
   const nickNameRef = useRef(null);
   const ageRef = useRef(null);
   const genderRef = useRef(null);
   const bioRef = useRef(null);
 
   const { email } = props;
+  const PROFILE_REQUEST_URL = '/api/v1/user_profile';
 
   function saveUserProfile(nickName, age, gender, bio) {
-  // pass
+  // Send to server
     const profileInfo = {
       email: 'test email',
       nickname: nickName,
@@ -32,8 +34,7 @@ function UserProfileForm(props) {
       gender,
       bio,
     };
-    console.log(profileInfo);
-    fetch('/api/v1/user_profile', {
+    fetch(PROFILE_REQUEST_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,10 +45,48 @@ function UserProfileForm(props) {
     }); // need nothing cause sending
   }
 
-  function findMatch() {
-    // pass
+  function findMatch(gender, name) {
+    // Send to server
 
   }
+
+  function loadData(userEmail) {
+    // Get data from server for this user
+    // Then fill out the form with the current data
+    const url = `${`${PROFILE_REQUEST_URL}?email=`}${userEmail}`;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json()).then((data) => {
+      if (({}).hasOwnProperty.call(data, 'googleName') && data.googleName !== null) googleNameRef.current.value = data.googleName;
+      if (({}).hasOwnProperty.call(data, 'nickName') && data.nickName !== null) nickNameRef.current.value = data.nickName;
+      if (({}).hasOwnProperty.call(data, 'age') && data.age !== null) ageRef.current.value = data.age;
+      if (({}).hasOwnProperty.call(data, 'gender') && data.gender !== null) {
+        switch (data.gender) {
+          case 'Male':
+            genderRef.current.selectedIndex = 0;
+            break;
+          case 'Female':
+            genderRef.current.selectedIndex = 1;
+            break;
+          case 'Non-Binary':
+            genderRef.current.selectedIndex = 2;
+            break;
+          default:
+            genderRef.current.selectedIndex = 0;
+            break;
+        }
+      }
+      if (({}).hasOwnProperty.call(data, 'bio') && data.bio !== null) bioRef.current.value = data.bio;
+    });
+  }
+
+  // Load existing profile data for user if exists on page load
+  useEffect(() => {
+    loadData('mockdb@email');
+  }, []);
 
   return (
     <Form>
@@ -55,7 +94,7 @@ function UserProfileForm(props) {
         <Col xs={4}>
           <Form.Group controlId="googleName">
             <Form.Label>Full Name</Form.Label>
-            <Form.Control type="text" placeholder="NameFromOath" readOnly />
+            <Form.Control type="text" ref={googleNameRef} placeholder="NameFromOath" readOnly />
           </Form.Group>
         </Col>
       </Form.Row>
@@ -78,9 +117,9 @@ function UserProfileForm(props) {
           <Form.Group controlId="formGender">
             <Form.Label>Gender</Form.Label>
             <Form.Control ref={genderRef} as="select" defaultValue="Choose...">
-              <option>Male</option>
-              <option>Female</option>
-              <option>Non-Binary</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Non-Binary">Non-Binary</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -100,7 +139,7 @@ function UserProfileForm(props) {
           </Button>
         </Col>
         <Col xs={3}>
-          <Button variant="danger" onClick={() => findMatch()}>
+          <Button variant="danger" onClick={() => findMatch(genderRef.current.value, googleNameRef.current.value)}>
             Find a Match
           </Button>
         </Col>

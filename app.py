@@ -2,13 +2,30 @@
 Server driver code
 '''
 import os
+from database import db
 from flask import Flask, send_from_directory, json, request
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from models import UserProfile, Conversations
 from dotenv import load_dotenv, find_dotenv
 
-app = Flask(__name__, static_folder='./build/static')
+load_dotenv(find_dotenv())
+
+if __name__ == '__main__':
+    app = create_app()
+
+def create_app():
+    '''
+    Create the Flask app in this function to avoid 
+    Circular imports with the database
+    '''
+    app = Flask(__name__, static_folder='./build/static')
+    # Point SQLAlchemy to your Heroku database
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+    # Gets rid of a warning
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.create_all()
+    return app
 
 
 @app.route('/', defaults={"filename": "index.html"})

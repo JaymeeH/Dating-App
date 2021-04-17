@@ -1,3 +1,4 @@
+from database import db
 class UserProfile(db.model):
     __tablename__ = 'profile'
     
@@ -8,6 +9,7 @@ class UserProfile(db.model):
     age = db.Column(db.Integer)
     gender = db.Column(db.String(15))
     bio = db.Column(db.String(2048))
+    image_url = db.Column(db.String(200))
     message_ids = db.relationship('Conversations', backref='profile', lazy=True)
     
     def __repr__(self):
@@ -18,6 +20,6 @@ class Conversations(db.model):
     __tablename__ = 'conversations'
     
     message_id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(Integer, ForeignKey('profile.uid'), nullable=False)
-    receiver_id = db.Column(Integer, ForeignKey('profile.uid'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('profile.uid'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('profile.uid'), nullable=False)
     message = db.Column(db.String(2048))

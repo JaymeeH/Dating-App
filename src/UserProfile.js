@@ -29,8 +29,8 @@ function UserProfileForm(props) {
   function saveUserProfile(nickName, age, gender, bio) {
   // Send to server
     const profileInfo = {
-      email: 'test email',
-      oath_name: 'test name',
+      email: email,
+      oath_name: googleNameRef.current.value,
       nickname: nickName,
       age,
       gender,
@@ -100,7 +100,7 @@ function UserProfileForm(props) {
 
   // Load existing profile data for user if exists on page load
   useEffect(() => {
-    loadData('mockdb@email');
+    loadData(email);
   }, []);
 
   return (

@@ -41,7 +41,7 @@ function App() {
             path="/profile" >
             {isLoggedIn() ? 
               (
-                <UserProfileGrid />
+                <UserProfileGrid email={isLoggedIn()}/>
               ) : (
                 <Redirect to="/" />
               )

@@ -1,0 +1,39 @@
+
+.List{
+	text-align: center;
+	background-color: lightblue;
+	width:100px;
+	height:50px;
+	display:inline-block;
+}
+
+.Main{
+    text-align: center;
+    
+}
+
+.Chat{
+	vertical-align: top;
+	display:inline-block;
+	
+}
+
+.Match{
+	text-align: center;
+	border: 1px solid black;
+}
+
+.unMatch{
+	text-align: center;
+	background-color: grey;
+	width:100px;
+	height:50px;
+}
+.Profile{
+	text-align:center;
+	width:100px;
+	height:50px;
+}
+.profileViewer{
+	display:none;
+}

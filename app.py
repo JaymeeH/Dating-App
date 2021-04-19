@@ -9,6 +9,7 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from models import UserProfile, Conversations
 from dotenv import load_dotenv, find_dotenv
+import re
 
 load_dotenv(find_dotenv())
 
@@ -79,6 +80,11 @@ def user_profile():
     }
 
 
+mock_male_list = ['Chris', 'Michael', 'Johnny']
+mock_female_list = ['Jenny', 'Jessica', 'ChiChi']
+mock_percentage = 0 
+
+
 @app.route('/api/v1/match', methods=['POST'])
 def match_clicked():
     '''
@@ -87,9 +93,27 @@ def match_clicked():
     '''
     print("match clicked")
     #request_data = request.json()
-    mock_data = ['Kadeem','Jessica']
+    mock_user = {
+        'name': 'Kadeem',
+        'gender': 'male'
+    }
+                
+    mock_user2 = {
+        'name': 'Karen',
+        'gender' : 'female'
+    }
+    
+    testUser = mock_user2
+    #testUser = mock_user
+    
+    
     #do_match_function(request_data['name1'], request_data['name2'])
-    do_match_function(mock_data[0],mock_data[1])
+    if testUser['gender'] is 'male':
+        for name in mock_female_list:
+            do_match_function(testUser['name'], name)
+    else:    
+        for name in mock_male_list:
+            do_match_function(testUser['name'], name)
 
     return {'success': True}
 
@@ -98,7 +122,17 @@ def do_match_function(name1,name2):
     querystring = {"fname": name1,"sname": name2}
     response = requests.request("GET", love_calculator_url, headers=headers, params=querystring)
     print(response.text)
-    return response
+    m = re.search('percentage.*,',response.text)
+    #print(m.group(0))
+    percent = m.group(0)
+    newpercent = percent[13:15]
+    print(newpercent)
+    
+    if (int(newpercent) > mock_percentage):
+        mock_percentage = int(newpercent)
+        print("this is current mock percent")
+        print(str(mock_percentage))
+   # return response
 
 
 

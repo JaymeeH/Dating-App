@@ -3,7 +3,8 @@ Server driver code
 '''
 import os
 from database import db
-from flask import Flask, send_from_directory, json, request
+from flask import Flask, send_from_directory, json,request
+import requests
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from models import UserProfile, Conversations
@@ -26,6 +27,18 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
+
+'''
+
+love calculator api 
+
+'''
+love_calculator_url = "https://love-calculator.p.rapidapi.com/getPercentage"
+
+headers = {
+    'x-rapidapi-key': os.getenv('L_C_KEY'),
+    'x-rapidapi-host': "love-calculator.p.rapidapi.com"
+}
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
@@ -72,13 +85,21 @@ def match_clicked():
     REST api for when match is clicked from user profile
     Posts the user's name and gender
     '''
-    request_data = request.json()
-    do_match_function(request_data['name'], request_data['gender'])
+    print("match clicked")
+    #request_data = request.json()
+    mock_data = ['Kadeem','Jessica']
+    #do_match_function(request_data['name1'], request_data['name2'])
+    do_match_function(mock_data[0],mock_data[1])
+
     return {'success': True}
 
 
-def do_match_function(name, gender):
-    pass
+def do_match_function(name1,name2):
+    querystring = {"fname": name1,"sname": name2}
+    response = requests.request("GET", love_calculator_url, headers=headers, params=querystring)
+    print(response.text)
+    return response
+
 
 
 def get_profile_from_db(email):

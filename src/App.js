@@ -15,8 +15,9 @@ function App() {
   }
   
   function getMatch() {
+    console.log("reached getMatch function")
     fetch('/api/v1/match', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         
       },
@@ -40,6 +41,7 @@ function App() {
             <div className="App">
               <Login />
               <Logout />
+              <button type="button" onClick={() => getMatch()}>Match</button>
             </div>
           </Route>
           <Route

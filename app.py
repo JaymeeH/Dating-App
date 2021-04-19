@@ -42,7 +42,7 @@ def login():
     REST api for saving NJIT login data
     '''
     request_data = request.get_json()
-    #add_to_db(request_data['email'], request_data['name'], profile_image=request_data['image'])
+    # add_to_db(request_data['email'], request_data['name'], profile_image=request_data['image'])
     print(request_data)
     return {'success': True}
 
@@ -62,7 +62,7 @@ def user_profile():
         # Get data from DB
         if 'email' in request.args:
             # query db with email for other columns
-            #data = get_profile_from_db(request.args['email'])
+            # data = get_profile_from_db(request.args['email'])
             mock_data = {
                 'email': 'mockdb@email',
                 'googleName': 'Zachary Chuba',
@@ -89,12 +89,13 @@ def match_clicked():
     Posts the user's name and gender
     '''
     request_data = request.json()
-    do_match_function(request_data['name'], request_data['gender'])
-    return {'success': True}
+    match_email = do_match_function(request_data['name'], request_data['gender'])
+    matchs_profile = get_profile_from_db(match_email)
+    return matchs_profile
 
 
 def do_match_function(name, gender):
-    pass
+    return 'pass'
 
 
 def get_profile_from_db(email):
@@ -163,7 +164,8 @@ def update_in_db(db_row, nickname, age, gender, bio):
     db.session.commit()
 
 
-app.run(
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-)
+if __name__ == '__main__':
+    app.run(
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )

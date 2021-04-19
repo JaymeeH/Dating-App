@@ -11,17 +11,17 @@ const LOGIN_URL = '/api/v1/login';
 
 
 
-const Login = () => {
+const Login = (props) => {
     //USE STATES TO CHECK EMAIL ADDRESS
-    const [Email, setEmail] = useState('');
+    //const [Email, setEmail] = useState('');
     const [LogState, setLogState] = useState(false);
     const [ifNJIT, setIfNJIT] = useState(false);
     const [fullID, setFullID] = useState('');
     
     const onSuccess = (res) => {
      console.log('[Login Success] currentUser:', res.profileObj);
-     setEmail(res.profileObj.email);
-     setLogState(true);
+     props.setter(res.profileObj.email)
+     props.logSetter(true);
      checkEmail(res);
     alert(
          `Logged in successfully welcome ${res.profileObj.name} `
@@ -39,7 +39,8 @@ const Login = () => {
    const checkEmail = (res) => {
        const emailCopy = Email;
        if (emailCopy.includes('@njit.edu')) {
-           setIfNJIT(true);
+           props.setId(true);
+           //setIfNJIT(true);
            saveLoginData(res.profileObj.name,res.profileObj.givenName,
             res.profileObj.email,res.profileObj.image_url);
        }

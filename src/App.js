@@ -11,13 +11,17 @@ function App() {
   const [Email, setEmail] = useState('');
   const [LogState, setLogState] = useState(false);
   const [ifNJIT, setIfNJIT] = useState(false);
-  const isLoggedIn = (res) => {
-    console.log('[Login Success] currentUser:', res.profileObj);
-    setLogState(true)
-    setIfNJIT(true)
-    setEmail(res.profileObj.Email)
-    
+  const isLoggedIn = () => {
+    //console.log('[Login Success] currentUser:',res.profileObj );
+    if(LogState === true){
+      if(ifNJIT === true){
+        return Email;
       }
+    }
+    return false;
+    
+    
+      };
     
     // stub: todo get isLoggedIn from server session
     
@@ -25,7 +29,9 @@ function App() {
 
   return (
     <div className="App">
-      <Login onClick={isLoggedIn}/>
+      <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
+      logState={LogState} logSetter={setLogState} 
+      Id={ifNJIT} setId={setIfNJIT}/>
       <Logout />
     </div>
     );

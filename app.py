@@ -11,8 +11,6 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-if __name__ == '__main__':
-    app = create_app()
 
 def create_app():
     '''
@@ -28,10 +26,25 @@ def create_app():
     return app
 
 
+if __name__ == '__main__':
+    app = create_app()
+
+
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
 def index(filename):
     return send_from_directory('./build', filename)
+
+
+@app.route('/api/v1/login', methods=['GET', 'POST'])
+def login():
+    '''
+    REST api for saving NJIT login data
+    '''
+    request_data = request.get_json()
+    #add_to_db(request_data['email'], request_data['name'], profile_image=request_data['image'])
+    print(request_data)
+    return {'success': True}
 
 
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
@@ -42,12 +55,14 @@ def user_profile():
     if request.method == 'POST':
         # Write data to DB
         request_data = request.get_json()
+        # update_user_data(request_data)
         print(request_data)
         return {'success': True}
     else:
         # Get data from DB
         if 'email' in request.args:
             # query db with email for other columns
+            #data = get_profile_from_db(request.args['email'])
             mock_data = {
                 'email': 'mockdb@email',
                 'googleName': 'Zachary Chuba',
@@ -122,12 +137,15 @@ def update_user_data(user_data):
         update_in_db(db_user, nickname, age, gender, bio)
 
 
-def add_to_db(email, oath_name, nickname=None, age=None, gender=None, bio=None):
+def add_to_db(email, oath_name, nickname=None, age=None, gender=None, bio=None, profile_image=None):
     '''
     Creates a new record in the db with the given parameters,
     if any are none, does not create those parameters
     '''
-    new_user = UserProfile(email=email, oath_name=oath_name, nickname=nickname, age=age, gender=gender, bio=bio)
+    if nickname is None:
+        new_user = UserProfile(email=email, oath_name=oath_name, image_url=profile_image)
+    else:
+        new_user = UserProfile(email=email, oath_name=oath_name, nickname=nickname, age=age, gender=gender, bio=bio)
     db.session.add(new_user)
     db.session.commit()
 

@@ -80,10 +80,43 @@ def user_profile():
     }
 
 
-mock_male_list = ['Chris', 'Michael', 'Johnny']
-mock_female_list = ['Jenny', 'Jessica', 'ChiChi']
-mock_percentage = 0 
-
+mock_male_list = [
+                    {
+                        'name' : 'Chris',
+                        'email' : 'chris@njit.edu'
+                        
+                        
+                    }, 
+                    {
+                        'name' : 'Michael',
+                        'email' : 'michael@njit.edu'
+                        
+                    }, 
+                    {
+                        'name' : 'Johnny',
+                        'email' : 'johnny@njit.edu'
+                        
+                    }
+                ]
+                
+mock_female_list = [ 
+                    {
+                        'name' : 'Jessica',
+                        'email' : 'jessica@njit.edu'
+                        
+                        
+                    }, 
+                    {
+                        'name' : 'Jenny',
+                        'email' : 'jenny@njit.edu'
+                        
+                    }, 
+                    {
+                        'name' : 'ChiChi',
+                        'email' : 'chichi@njit.edu'
+                        
+                    }
+                ]
 
 @app.route('/api/v1/match', methods=['POST'])
 def match_clicked():
@@ -95,44 +128,91 @@ def match_clicked():
     #request_data = request.json()
     mock_user = {
         'name': 'Kadeem',
-        'gender': 'male'
+        'gender': 'male',
+        'email' : 'kadeem@njit.edu'
     }
                 
     mock_user2 = {
         'name': 'Karen',
-        'gender' : 'female'
+        'gender' : 'female',
+        'email' : 'karen@njit.edu'
     }
     
-    testUser = mock_user2
-    #testUser = mock_user
+    #testUser = mock_user2
+    testUser = mock_user
+    mock_percentage = 0
+    mock_match = {}
     
     
-    #do_match_function(request_data['name1'], request_data['name2'])
     if testUser['gender'] is 'male':
+        rating = {}
         for name in mock_female_list:
-            do_match_function(testUser['name'], name)
+            #print("this is name")
+            #print(name)
+            rating = do_match_function(testUser, name)
+            #print("under this")
+            check_percentage = int(rating['percentage'])
+            #print(type(check_percentage))
+            #print("this is rating")
+            #print(type(rating['percentage']))
+            #print(type(mock_percentage))
+            if check_percentage > mock_percentage:
+               mock_percentage = int(rating['percentage'])
+               mock_match['name'] = rating['name']
+               mock_match['email'] = rating['email']
+               mock_match['percentage'] = rating['percentage']
+
+            
+        print("this is return match")    
+        print(mock_match)
+        return(mock_match)
+            
     else:    
+        rating = {}
         for name in mock_male_list:
-            do_match_function(testUser['name'], name)
+            #print("this is name")
+            #print(name)
+            rating = do_match_function(testUser, name)
+            #print("under this")
+            check_percentage = int(rating['percentage'])
+            print(type(check_percentage))
+            #print("this is rating")
+            #print(type(rating['percentage']))
+            print(type(mock_percentage))
+            if check_percentage > mock_percentage:
+                mock_percentage = int(rating['percentage'])
+                mock_match['name'] = rating['name']
+                mock_match['email'] = rating['email']
+                mock_match['percentage'] = rating['percentage']
+                
+        print("this is return match")    
+        print(mock_match)
+        return(mock_match)
 
     return {'success': True}
 
 
+
 def do_match_function(name1,name2):
-    querystring = {"fname": name1,"sname": name2}
+    querystring = {"fname": name1['name'],"sname": name2['name']}
     response = requests.request("GET", love_calculator_url, headers=headers, params=querystring)
     print(response.text)
     m = re.search('percentage.*,',response.text)
     #print(m.group(0))
     percent = m.group(0)
     newpercent = percent[13:15]
-    print(newpercent)
+    match_info = {}
     
-    if (int(newpercent) > mock_percentage):
-        mock_percentage = int(newpercent)
-        print("this is current mock percent")
-        print(str(mock_percentage))
-   # return response
+    match_info['name'] = name2['name']
+    match_info['percentage'] = newpercent
+    match_info['email'] = name2['email']
+    
+    #print(newpercent)
+    # if (mock_percentage < int(newpercent)):
+    #     mock_percentage = int(newpercent)
+    #     print("this is current mock percent")
+    #     print(str(mock_percentage))
+    return match_info
 
 
 

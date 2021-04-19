@@ -1,25 +1,48 @@
 import logo from './logo.svg';
 import './App.css';
+import Login from './components/Login';
+import Logout from './components/Logout';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import UserProfileGrid from './UserProfile';
 
 function App() {
+  function isLoggedIn() {
+    // stub: todo get isLoggedIn from server session
+    return true;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Login />
+      <Logout />
     </div>
-  );
+    );
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route
+            exact
+            path="/"
+          >
+            <UserProfileGrid />
+          </Route>
+          <Route
+            path="/profile" >
+            {isLoggedIn() ? 
+              (
+                <UserProfileGrid />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
+  ;
 }
+
 
 export default App;

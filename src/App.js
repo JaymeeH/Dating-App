@@ -7,11 +7,21 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
 
 function App() {
-  function isLoggedIn() {
-    // stub: todo get isLoggedIn from server session
-    return true;
-  }
-
+  const [Email, setEmail] = useState('');
+  const [LogState, setLogState] = useState(false);
+  const [ifNJIT, setIfNJIT] = useState(false);
+  const isLoggedIn = () => {
+    //console.log('[Login Success] currentUser:',res.profileObj );
+    if(LogState === true){
+      if(ifNJIT === true){
+        return Email;
+      }
+    }
+    return false;
+    
+    
+  };
+    
   return (
     <BrowserRouter>
       <div>
@@ -21,7 +31,9 @@ function App() {
             path="/"
           >
             <div className="App">
-              <Login />
+              <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
+              logState={LogState} logSetter={setLogState} 
+              Id={ifNJIT} setId={setIfNJIT}/>
               <Logout />
             </div>
           </Route>

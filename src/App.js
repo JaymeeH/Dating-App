@@ -7,18 +7,30 @@ import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
 
+
 function App() {
   function isLoggedIn() {
     // stub: todo get isLoggedIn from server session
     return true;
   }
+  
+  function getMatch() {
+    console.log("reached getMatch function")
+    fetch('/api/v1/match', {
+      method: 'POST',
+      headers: {
+        
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      
+    })
+    
+  }
 
   return (
-    <div className="App">
-      <Login />
-      <Logout />
-    </div>
-    );
     <BrowserRouter>
       <div>
         <Switch>
@@ -26,7 +38,11 @@ function App() {
             exact
             path="/"
           >
-            <UserProfileGrid />
+            <div className="App">
+              <Login />
+              <Logout />
+              <button type="button" onClick={() => getMatch()}>Match</button>
+            </div>
           </Route>
           <Route
             path="/profile" >
@@ -41,7 +57,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
-  ;
+  );
 }
 
 

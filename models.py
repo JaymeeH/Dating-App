@@ -1,5 +1,5 @@
 from database import db
-class UserProfile(db.model):
+class UserProfile(db.Model):
     __tablename__ = 'profile'
     
     uid = db.Column(db.Integer, primary_key=True)
@@ -16,7 +16,7 @@ class UserProfile(db.model):
         return '<UserProfile for {}>'.format(self.email)
 
 
-class Conversations(db.model):
+class Conversations(db.Model):
     __tablename__ = 'conversations'
     
     message_id = db.Column(db.Integer, primary_key=True)

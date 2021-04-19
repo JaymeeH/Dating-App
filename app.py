@@ -106,8 +106,36 @@ def update_user_data(user_data):
     '''
     Given a dictionary of user data, add it to the database
     '''
+    email = user_data['email']
+    oath_name = user_data['oath_name']
+    nickname = user_data['nickname']
+    age = user_data['age']
+    gender = user_data['gender']
+    bio = user_data['bio']
+    
     db_user = UserProfile.query.filter_by(email=user_data['email']).first()
+    
+    if db_user is None:
+        # Add new record to db
+        add_to_db(email, oath_name, nickname, age, gender, bio)
+    else:
+        update_in_db(db_user, nickname, age, gender, bio)
 
+
+def add_to_db(email, oath_name, nickname=None, age=None, gender=None, bio=None):
+    '''
+    Creates a new record in the db with the given parameters,
+    if any are none, does not create those parameters
+    '''
+    
+
+
+def update_in_db(db_row, nickname, age, gender, bio):
+    '''
+    If a column exists in the db, update it with the parameter values,
+    If any are none, do not update it
+    '''
+    
 
 
 app.run(

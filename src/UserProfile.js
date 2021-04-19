@@ -30,6 +30,7 @@ function UserProfileForm(props) {
   // Send to server
     const profileInfo = {
       email: 'test email',
+      oath_name: 'test name',
       nickname: nickName,
       age,
       gender,

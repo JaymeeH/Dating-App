@@ -4,9 +4,9 @@ import { GoogleLogin } from 'react-google-login';
 import { refreshTokenSetup } from '../utils/refreshToken';
 
 //Load the contents of .env variables
-require('dotenv').config()
+require('dotenv').config();
 const clientId = process.env.REACT_APP_CLIENT_ID;
-console.log(clientId)
+console.log(clientId);
 const LOGIN_URL = '/api/v1/login';
 
 
@@ -16,6 +16,7 @@ const Login = () => {
     const [Email, setEmail] = useState('');
     const [LogState, setLogState] = useState(false);
     const [ifNJIT, setIfNJIT] = useState(false);
+    const [fullID, setFullID] = useState('');
     
     const onSuccess = (res) => {
      console.log('[Login Success] currentUser:', res.profileObj);
@@ -32,6 +33,7 @@ const Login = () => {
    
    const onFailure = (res) => {
        console.log('[Login failed] res:', res);
+       
    };
    
    const checkEmail = (res) => {

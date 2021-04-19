@@ -34,6 +34,15 @@ def index(filename):
     return send_from_directory('./build', filename)
 
 
+@app.login('/api/v1/login', methods=['GET', 'POST'])
+def login():
+    '''
+    REST api for saving NJIT login data
+    '''
+    request_data = request.get_json()
+    print(request_data)
+    return {'success': True}
+
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
 def user_profile():
     '''

@@ -7,10 +7,26 @@ import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
 
+
 function App() {
   function isLoggedIn() {
     // stub: todo get isLoggedIn from server session
     return true;
+  }
+  
+  function getMatch() {
+    fetch('/api/v1/match', {
+      method: 'GET',
+      headers: {
+        
+      },
+    })
+    .then(response => {
+      return response.json();
+    }).then(responseData => {
+      
+    })
+    
   }
 
   return (

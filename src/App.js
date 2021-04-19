@@ -14,11 +14,6 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Login />
-      <Logout />
-    </div>
-    );
     <BrowserRouter>
       <div>
         <Switch>
@@ -26,7 +21,10 @@ function App() {
             exact
             path="/"
           >
-            <UserProfileGrid />
+            <div className="App">
+              <Login />
+              <Logout />
+            </div>
           </Route>
           <Route
             path="/profile" >
@@ -41,7 +39,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
-  ;
+  );
 }
 
 

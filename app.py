@@ -34,15 +34,6 @@ def index(filename):
     return send_from_directory('./build', filename)
 
 
-@app.login('/api/v1/login', methods=['GET', 'POST'])
-def login():
-    '''
-    REST api for saving NJIT login data
-    '''
-    request_data = request.get_json()
-    print(request_data)
-    return {'success': True}
-
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
 def user_profile():
     '''
@@ -136,7 +127,9 @@ def add_to_db(email, oath_name, nickname=None, age=None, gender=None, bio=None):
     Creates a new record in the db with the given parameters,
     if any are none, does not create those parameters
     '''
-    
+    new_user = UserProfile(email=email, oath_name=oath_name, nickname=nickname, age=age, gender=gender, bio=bio)
+    db.session.add(new_user)
+    db.session.commit()
 
 
 def update_in_db(db_row, nickname, age, gender, bio):
@@ -144,7 +137,12 @@ def update_in_db(db_row, nickname, age, gender, bio):
     If a column exists in the db, update it with the parameter values,
     If any are none, do not update it
     '''
-    
+    db_row.nickname = nickname
+    db_row.age = age
+    db_row.gender = gender
+    db_row.bio = bio
+    db.session.merge(db_row)
+    db.session.commit()
 
 
 app.run(

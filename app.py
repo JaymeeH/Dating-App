@@ -3,15 +3,15 @@ Server driver code
 '''
 import os
 from database import db
-from flask import Flask, send_from_directory, json,request
+from flask import Flask, send_from_directory, json, request
 import requests
-from flask_socketio import SocketIO
 from flask_cors import CORS
-from models import UserProfile, Conversations
+from models import UserProfile
 from dotenv import load_dotenv, find_dotenv
 import re
 
 load_dotenv(find_dotenv())
+
 
 def create_app():
     '''
@@ -23,12 +23,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     # Gets rid of a warning
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    #db.create_all()
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
     return app
+
 
 if __name__ == '__main__':
     app = create_app()
-
 '''
 
 love calculator api 
@@ -41,10 +43,24 @@ headers = {
     'x-rapidapi-host': "love-calculator.p.rapidapi.com"
 }
 
+
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
 def index(filename):
     return send_from_directory('./build', filename)
+
+
+@app.route('/api/v1/login', methods=['GET', 'POST'])
+def login():
+    '''
+    REST api for saving NJIT login data
+    '''
+    request_data = request.get_json()
+    add_to_db(request_data['email'],
+              request_data['name'],
+              )
+    print(request_data)
+    return {'success': True}
 
 
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
@@ -80,43 +96,28 @@ def user_profile():
     }
 
 
-mock_male_list = [
-                    {
-                        'name' : 'Chris',
-                        'email' : 'chris@njit.edu'
-                        
-                        
-                    }, 
-                    {
-                        'name' : 'Michael',
-                        'email' : 'michael@njit.edu'
-                        
-                    }, 
-                    {
-                        'name' : 'Johnny',
-                        'email' : 'johnny@njit.edu'
-                        
-                    }
-                ]
-                
-mock_female_list = [ 
-                    {
-                        'name' : 'Jessica',
-                        'email' : 'jessica@njit.edu'
-                        
-                        
-                    }, 
-                    {
-                        'name' : 'Jenny',
-                        'email' : 'jenny@njit.edu'
-                        
-                    }, 
-                    {
-                        'name' : 'ChiChi',
-                        'email' : 'chichi@njit.edu'
-                        
-                    }
-                ]
+mock_male_list = [{
+    'name': 'Chris',
+    'email': 'chris@njit.edu'
+}, {
+    'name': 'Michael',
+    'email': 'michael@njit.edu'
+}, {
+    'name': 'Johnny',
+    'email': 'johnny@njit.edu'
+}]
+
+mock_female_list = [{
+    'name': 'Jessica',
+    'email': 'jessica@njit.edu'
+}, {
+    'name': 'Jenny',
+    'email': 'jenny@njit.edu'
+}, {
+    'name': 'ChiChi',
+    'email': 'chichi@njit.edu'
+}]
+
 
 @app.route('/api/v1/match', methods=['POST'])
 def match_clicked():
@@ -129,21 +130,20 @@ def match_clicked():
     mock_user = {
         'name': 'Kadeem',
         'gender': 'male',
-        'email' : 'kadeem@njit.edu'
+        'email': 'kadeem@njit.edu'
     }
-                
+
     mock_user2 = {
         'name': 'Karen',
-        'gender' : 'female',
-        'email' : 'karen@njit.edu'
+        'gender': 'female',
+        'email': 'karen@njit.edu'
     }
-    
+
     #testUser = mock_user2
     testUser = mock_user
     mock_percentage = 0
     mock_match = {}
-    
-    
+
     if testUser['gender'] is 'male':
         rating = {}
         for name in mock_female_list:
@@ -157,17 +157,16 @@ def match_clicked():
             #print(type(rating['percentage']))
             #print(type(mock_percentage))
             if check_percentage > mock_percentage:
-               mock_percentage = int(rating['percentage'])
-               mock_match['name'] = rating['name']
-               mock_match['email'] = rating['email']
-               mock_match['percentage'] = rating['percentage']
+                mock_percentage = int(rating['percentage'])
+                mock_match['name'] = rating['name']
+                mock_match['email'] = rating['email']
+                mock_match['percentage'] = rating['percentage']
 
-            
-        print("this is return match")    
+        print("this is return match")
         print(mock_match)
-        return(mock_match)
-            
-    else:    
+        return (mock_match)
+
+    else:
         rating = {}
         for name in mock_male_list:
             #print("this is name")
@@ -184,36 +183,37 @@ def match_clicked():
                 mock_match['name'] = rating['name']
                 mock_match['email'] = rating['email']
                 mock_match['percentage'] = rating['percentage']
-                
-        print("this is return match")    
+
+        print("this is return match")
         print(mock_match)
-        return(mock_match)
+        return (mock_match)
 
     #return {'success': True}
 
 
-
-def do_match_function(name1,name2):
-    querystring = {"fname": name1['name'],"sname": name2['name']}
-    response = requests.request("GET", love_calculator_url, headers=headers, params=querystring)
+def do_match_function(name1, name2):
+    querystring = {"fname": name1['name'], "sname": name2['name']}
+    response = requests.request("GET",
+                                love_calculator_url,
+                                headers=headers,
+                                params=querystring)
     print(response.text)
-    m = re.search('percentage.*,',response.text)
+    m = re.search('percentage.*,', response.text)
     #print(m.group(0))
     percent = m.group(0)
     newpercent = percent[13:15]
     match_info = {}
-    
+
     match_info['name'] = name2['name']
     match_info['percentage'] = newpercent
     match_info['email'] = name2['email']
-    
+
     #print(newpercent)
     # if (mock_percentage < int(newpercent)):
     #     mock_percentage = int(newpercent)
     #     print("this is current mock percent")
     #     print(str(mock_percentage))
     return match_info
-
 
 
 def get_profile_from_db(email):
@@ -246,9 +246,9 @@ def update_user_data(user_data):
     age = user_data['age']
     gender = user_data['gender']
     bio = user_data['bio']
-    
+
     db_user = UserProfile.query.filter_by(email=user_data['email']).first()
-    
+
     if db_user is None:
         # Add new record to db
         add_to_db(email, oath_name, nickname, age, gender, bio)
@@ -256,12 +256,29 @@ def update_user_data(user_data):
         update_in_db(db_user, nickname, age, gender, bio)
 
 
-def add_to_db(email, oath_name, nickname=None, age=None, gender=None, bio=None):
+def add_to_db(email,
+              oath_name,
+              nickname=None,
+              age=None,
+              gender=None,
+              bio=None,
+              profile_image=None):
     '''
     Creates a new record in the db with the given parameters,
     if any are none, does not create those parameters
     '''
-    new_user = UserProfile(email=email, oath_name=oath_name, nickname=nickname, age=age, gender=gender, bio=bio)
+    if nickname is None:
+        new_user = UserProfile(email=email,
+                               oath_name=oath_name,
+                               )
+    else:
+        new_user = UserProfile(email=email,
+                               oath_name=oath_name,
+                               nickname=nickname,
+                               age=age,
+                               gender=gender,
+                               bio=bio)
+    print(new_user)
     db.session.add(new_user)
     db.session.commit()
 

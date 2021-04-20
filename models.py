@@ -10,12 +10,12 @@ class UserProfile(db.Model):
     gender = db.Column(db.String(15))
     bio = db.Column(db.String(2048))
     image_url = db.Column(db.String(200))
-    message_ids = db.relationship('Conversations', backref='profile', lazy=True)
+    #message_ids = db.relationship('Conversations', backref='profile', lazy=True)
     
     def __repr__(self):
         return '<UserProfile for {}>'.format(self.email)
 
-
+'''
 class Conversations(db.Model):
     __tablename__ = 'conversations'
     
@@ -23,3 +23,4 @@ class Conversations(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('profile.uid'), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('profile.uid'), nullable=False)
     message = db.Column(db.String(2048))
+'''

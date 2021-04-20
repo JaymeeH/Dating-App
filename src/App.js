@@ -14,8 +14,8 @@ function App() {
   const [ifNJIT, setIfNJIT] = useState(false);
   const isLoggedIn = () => {
     //console.log('[Login Success] currentUser:',res.profileObj );
-    if(LogState === true){
-      if(ifNJIT === true){
+    if(LogState){
+      if(ifNJIT){
         return Email;
       }
     }
@@ -31,23 +31,14 @@ function App() {
           <Route
             exact
             path="/"
-          >
+            render={() => isLoggedIn() ? <UserProfileGrid /> :
             <div className="App">
               <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
                 logState={LogState} logSetter={setLogState} 
                 Id={ifNJIT} setId={setIfNJIT}/>
               <Logout />
             </div>
-          </Route>
-          <Route
-            path="/profile" >
-            {isLoggedIn() ? 
-              (
-                <UserProfileGrid />
-              ) : (
-                <Redirect to="/" />
-              )
-            }
+            }>
           </Route>
         </Switch>
       </div>

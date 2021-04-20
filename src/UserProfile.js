@@ -52,7 +52,8 @@ function UserProfileForm(props) {
     // Send to server
     const json_packed_data = {
       'name': name,
-      'gender': gender
+      'gender': gender,
+      'email': email,
     }
     
     fetch(MATCH_URL, {

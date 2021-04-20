@@ -1,11 +1,20 @@
 # Flask and create-react-app
+#This app is deployed to:
+https://link-njit.herokuapp.com/
+However, in order to get passed the login page you must go to settings->clear browsing data->cached images and files
+In order to overcome the issue
+
 
 ## Requirements
 1. `npm install`
 2. `pip install -r requirements.txt`
 
+
 ## Setup
 1. Run `echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local` in the project directory
+2. Go to `https://rapidapi.com/developer/` and make a new developer account
+3. Create an app and generate an application key
+4. Make a .env file and put this in it `export L_C_KEY='YOUR_KEY_HERE'`
 
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`

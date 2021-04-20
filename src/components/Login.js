@@ -44,6 +44,9 @@ const Login = (props) => {
            saveLoginData(res.profileObj.name,res.profileObj.givenName,
             res.profileObj.email,res.profileObj.image_url);
        }
+       else{
+           alert('You must sign in with a valid njit email')
+       }
       
        
    };
@@ -70,7 +73,7 @@ const Login = (props) => {
         <div>
         <GoogleLogin
     clientId={clientId}
-    buttonText="Log in with Google"
+    buttonText="Log in with NJIT"
     onSuccess={onSuccess}
     onFailure={onFailure}
     cookiePolicy={'single_host_origin'}

@@ -191,7 +191,13 @@ def match_clicked():
 
     #return {'success': True}
 
-
+#@app.route('/api/v1/unMatch', methods=['POST'])
+#def unMatch():
+    #id1 = current user id2 = user id1 wants to unmatch
+    #DB.session.query(models.userProfile).filter(models.userProfile.uid == id1).delete(models.userProfile.message_ids == id2)
+    #DB.session.query(models.userProfile).filter(models.userProfile.uid == id2).delete(models.userProfile.message_ids == id1)
+    #DB.session.commit()
+    
 
 def do_match_function(name1,name2):
     querystring = {"fname": name1['name'],"sname": name2['name']}

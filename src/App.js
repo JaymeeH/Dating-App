@@ -14,12 +14,10 @@ function App() {
     return true;
   }
   
-  
-  var name;
-  var percentage;
+  const [activeProfile,changeProfile] = useState('','','')
   function getMatch() {
-    document.getElementById("profile").style.display = "block";
     console.log("reached getMatch function")
+    document.getElementById("profile").style.display = "block";
     fetch('/api/v1/match', {
       method: 'POST',
       headers: {
@@ -27,21 +25,20 @@ function App() {
       },
     })
     .then(response => {
-      
       return response.json();
     }).then(responseData => {
-    console.log(responseData);
-    name = responseData.name;
-    percentage = responseData.percentage;
-    console.log(name);
+      const newList = [...activeProfile];
+      newList[0] = responseData.name;
+      newList[1] = responseData.percentage;
+      newList[2] = responseData.email;
+      changeProfile(newList);
     })
     
   }
 
-  function unMatch(){
-    console.log(name);
+function unMatch(){
     document.getElementById("profile").style.display = "none";
-    console.log("reached unMatch function")
+    console.log("reached unMatch function");
     fetch('/api/v1/unMatch', {
       method: 'POST',
       headers: {
@@ -52,15 +49,18 @@ function App() {
       return response.json();
     }).then(responseData => {
     })
-  }
-  function expandProfile(){
-    if (document.getElementById("profileViewer").style.display === "none"){
+}
+
+function expandProfile(){
+  if (document.getElementById("profileViewer").style.display === "none"){
       document.getElementById("profileViewer").style.display = "block";
     }
     else{
       document.getElementById("profileViewer").style.display = "none";
     }
-  }
+}
+
+
   return (
     <BrowserRouter>
       <div>
@@ -75,11 +75,11 @@ function App() {
               <button type="button" onClick={() => getMatch()}>Match</button>
                 <div className="Profile" id = "profile">
                 <p>
-                <button type = "button" onClick ={() => expandProfile()}>{name}</button> 
-                <button type = "button" onClick={() => unMatch()}>Unmatch</button>
+                <button type = "button" onClick = {() => expandProfile()}>{activeProfile[0]}</button>
+                <button type = "button" onClick = {() => unMatch()}>Unmatch</button>
                 <br></br>
                   <div className = "profileViewer" id = "profileViewer">
-                  Pecentage compatability: {percentage}%
+                  Percentage compatability: {activeProfile[1]}%
                   <br></br>
                   </div>
                 </p>

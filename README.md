@@ -1,4 +1,9 @@
 # Flask and create-react-app
+#This app is deployed to:
+https://link-njit.herokuapp.com/
+However, in order to get passed the login page you must go to settings->clear browsing data->cached images and files
+In order to overcome the issue
+
 
 ## Requirements
 1. `npm install`

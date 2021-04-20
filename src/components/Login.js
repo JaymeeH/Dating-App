@@ -14,8 +14,8 @@ const LOGIN_URL = '/api/v1/login';
 const Login = (props) => {
     //USE STATES TO CHECK EMAIL ADDRESS
     //const [Email, setEmail] = useState('');
-    const [LogState, setLogState] = useState(false);
-    const [ifNJIT, setIfNJIT] = useState(false);
+    //const [LogState, setLogState] = useState(false);
+    //const [ifNJIT, setIfNJIT] = useState(false);
     const [fullID, setFullID] = useState('');
     
     const onSuccess = (res) => {
@@ -37,7 +37,7 @@ const Login = (props) => {
    };
    
    const checkEmail = (res) => {
-       const emailCopy = Email;
+       const emailCopy = res.profileObj.email;
        if (emailCopy.includes('@njit.edu')) {
            props.setId(true);
            //setIfNJIT(true);
@@ -64,7 +64,7 @@ const Login = (props) => {
            console.log(data);
        });
    };
-   console.log(Email);
+   //console.log(Email);
     return (
         <>
         <div>

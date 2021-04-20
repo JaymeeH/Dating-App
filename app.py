@@ -22,7 +22,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     # Gets rid of a warning
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.create_all()
+    #db.create_all()
     return app
 
 
@@ -82,7 +82,7 @@ def user_profile():
     }
 
 
-@app.route('api/v1/match', methods=['POST'])
+@app.route('/api/v1/match', methods=['POST'])
 def match_clicked():
     '''
     REST api for when match is clicked from user profile

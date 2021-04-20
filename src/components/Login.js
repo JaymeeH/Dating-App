@@ -37,7 +37,7 @@ const Login = (props) => {
    };
    
    const checkEmail = (res) => {
-       const emailCopy = Email;
+       const emailCopy = props.Email;
        if (emailCopy.includes('@njit.edu')) {
            props.setId(true);
            //setIfNJIT(true);
@@ -64,7 +64,7 @@ const Login = (props) => {
            console.log(data);
        });
    };
-   console.log(Email);
+
     return (
         <>
         <div>

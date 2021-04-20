@@ -56,9 +56,11 @@ def login():
     REST api for saving NJIT login data
     '''
     request_data = request.get_json()
-    add_to_db(request_data['email'],
-              request_data['name'],
-              )
+    db_user = UserProfile.query.filter_by(email=request_data['email']).first()
+    if db_user is None:
+        add_to_db(request_data['email'],
+                  request_data['name'],
+                  )
     print(request_data)
     return {'success': True}
 
@@ -71,21 +73,24 @@ def user_profile():
     if request.method == 'POST':
         # Write data to DB
         request_data = request.get_json()
+        update_user_data(request_data)
         print(request_data)
         return {'success': True}
     else:
         # Get data from DB
         if 'email' in request.args:
             # query db with email for other columns
-            mock_data = {
+            data = get_profile_from_db(request.args['email'])
+            print(data)
+            '''mock_data = {
                 'email': 'mockdb@email',
                 'googleName': 'Zachary Chuba',
                 'nickName': 'Zach',
                 'age': 20,
                 'gender': 'Male',
                 #'bio': 'A person',
-            }
-            return mock_data
+            }'''
+            return data
         else:
             return {'success': False, 'error': 'Invalid request arguments'}
     return {
@@ -243,7 +248,7 @@ def update_user_data(user_data):
     email = user_data['email']
     oath_name = user_data['oath_name']
     nickname = user_data['nickname']
-    age = user_data['age']
+    age = int(user_data['age']) if user_data['age'] != '' else None
     gender = user_data['gender']
     bio = user_data['bio']
 

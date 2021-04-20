@@ -4,11 +4,12 @@ import {
 } from 'react-bootstrap';
 
 function UserProfileGrid(props) {
+  const { email } = props;
   return (
     <Container>
       <Row>
         <Col>
-          <UserProfileForm />
+          <UserProfileForm email={email}/>
         </Col>
       </Row>
     </Container>
@@ -29,12 +30,12 @@ function UserProfileForm(props) {
   function saveUserProfile(nickName, age, gender, bio) {
   // Send to server
     const profileInfo = {
-      email: 'test email',
-      oath_name: 'test name',
+      email: email,
+      oath_name: googleNameRef.current.value,
       nickname: nickName,
-      age,
-      gender,
-      bio,
+      age: age,
+      gender: gender,
+      bio: bio,
     };
     fetch(PROFILE_REQUEST_URL, {
       method: 'POST',
@@ -76,8 +77,9 @@ function UserProfileForm(props) {
         'Content-Type': 'application/json',
       },
     }).then((response) => response.json()).then((data) => {
-      if (({}).hasOwnProperty.call(data, 'googleName') && data.googleName !== null) googleNameRef.current.value = data.googleName;
-      if (({}).hasOwnProperty.call(data, 'nickName') && data.nickName !== null) nickNameRef.current.value = data.nickName;
+      console.log(data);
+      if (({}).hasOwnProperty.call(data, 'oath_name') && data.oath_name !== null) googleNameRef.current.value = data.oath_name;
+      if (({}).hasOwnProperty.call(data, 'nickname') && data.nickname !== null) nickNameRef.current.value = data.nickname;
       if (({}).hasOwnProperty.call(data, 'age') && data.age !== null) ageRef.current.value = data.age;
       if (({}).hasOwnProperty.call(data, 'gender') && data.gender !== null) {
         switch (data.gender) {
@@ -101,8 +103,8 @@ function UserProfileForm(props) {
 
   // Load existing profile data for user if exists on page load
   useEffect(() => {
-    loadData('mockdb@email');
-  }, []);
+    loadData(email);
+  }, [email]);
 
   return (
     <Form>

@@ -31,7 +31,7 @@ function App() {
           <Route
             exact
             path="/"
-            render={() => isLoggedIn() ? <UserProfileGrid /> :
+            render={() => isLoggedIn() ? <UserProfileGrid email={Email}/> :
             <div className="App">
               <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
                 logState={LogState} logSetter={setLogState} 

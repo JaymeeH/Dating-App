@@ -12,6 +12,7 @@ const LOGIN_URL = '/api/v1/login';
 
 
 const Login = (props) => {
+    //child states, no longer needed
     //USE STATES TO CHECK EMAIL ADDRESS
     //const [Email, setEmail] = useState('');
     //const [LogState, setLogState] = useState(false);
@@ -23,19 +24,16 @@ const Login = (props) => {
      props.setter(res.profileObj.email)
      props.logSetter(true);
      checkEmail(res);
-    alert(
-         `Logged in successfully welcome ${res.profileObj.name} `
-     ); 
-    
+    //alert(
+      //   `Logged in successfully welcome ${res.profileObj.name} `
+     //);
      // initializing the setup  
      refreshTokenSetup(res);  
    };
-   
    const onFailure = (res) => {
        console.log('[Login failed] res:', res);
        
    };
-   
    const checkEmail = (res) => {
        const emailCopy = res.profileObj.email;
        if (emailCopy.includes('@njit.edu')) {
@@ -47,8 +45,6 @@ const Login = (props) => {
        else{
            alert('You must sign in with a valid njit email')
        }
-      
-       
    };
    const saveLoginData = (name,nickname,email,image_url) => {
        const loginInfo = {
@@ -81,12 +77,8 @@ const Login = (props) => {
     isSignedIN={true}
     />
     </div>
-   
-        
         </>
-        
         )
-    
 };
 
 export default Login;

@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
 
+
 function App() {
   const [Email, setEmail] = useState('');
   const [LogState, setLogState] = useState(false);
@@ -23,18 +24,7 @@ function App() {
     
       };
     
-    // stub: todo get isLoggedIn from server session
-    
-  
-
   return (
-    <div className="App">
-      <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
-      logState={LogState} logSetter={setLogState} 
-      Id={ifNJIT} setId={setIfNJIT}/>
-      <Logout />
-    </div>
-    );
     <BrowserRouter>
       <div>
         <Switch>
@@ -42,7 +32,12 @@ function App() {
             exact
             path="/"
           >
-            <UserProfileGrid />
+            <div className="App">
+              <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
+                logState={LogState} logSetter={setLogState} 
+                Id={ifNJIT} setId={setIfNJIT}/>
+              <Logout />
+            </div>
           </Route>
           <Route
             path="/profile" >
@@ -57,7 +52,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
-  ;
+  );
 }
 
 

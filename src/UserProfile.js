@@ -30,6 +30,7 @@ function UserProfileForm(props) {
   // Send to server
     const profileInfo = {
       email: 'test email',
+      oath_name: 'test name',
       nickname: nickName,
       age,
       gender,
@@ -61,6 +62,7 @@ function UserProfileForm(props) {
       body: JSON.stringify(json_packed_data)
     }).then((response) => response.json()).then((data) => {
       console.log('All good');
+      console.log(data);
     });
   }
 

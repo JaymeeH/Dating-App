@@ -20,14 +20,16 @@ class GetProfileTest(unittest.TestCase):
         '''
         self.success_test_params = [{
             KEY_INPUT: 'doesntexist@email',
-            KEY_EXPECTED: {'error': True}
+            KEY_EXPECTED: {
+                'error': True
+            }
         }, {
-            KEY_INPUT:
-            'improperly.formatted@email',
-            KEY_EXPECTED: {'error': True},
+            KEY_INPUT: 'improperly.formatted@email',
+            KEY_EXPECTED: {
+                'error': True
+            },
         }, {
-            KEY_INPUT:
-            'exists@email',
+            KEY_INPUT: 'exists@email',
             KEY_EXPECTED: {
                 'error': False,
                 'email': 'exists@email',
@@ -40,8 +42,8 @@ class GetProfileTest(unittest.TestCase):
             }
         }]
 
-        self.initial_db_mock = {'exists@email':
-            {
+        self.initial_db_mock = {
+            'exists@email': {
                 'error': False,
                 'email': 'exists@email',
                 'oath_name': 'it exists',
@@ -52,8 +54,7 @@ class GetProfileTest(unittest.TestCase):
                 'image_url': '',
             }
         }
-    
-    
+
     def mock_out_query(self, email):
         '''
         Return None if no user exists, else the user
@@ -62,15 +63,13 @@ class GetProfileTest(unittest.TestCase):
             return self.initial_db_mock[email]
         else:
             return None
-    
-    
+
     def mock_db_get_user_attributes(self, user):
         '''
         Return user
         '''
         return user
-    
-    
+
     def test_success(self):
         '''
         Mock and run test cases for get_profile_from_db
@@ -78,16 +77,15 @@ class GetProfileTest(unittest.TestCase):
         print('Test cases for get_profile_from_db')
         for test_param in self.success_test_params:
             with patch('app.mock_out_query', self.mock_out_query):
-                with patch('app.get_db_user_attributes', self.mock_db_get_user_attributes):
-                    
+                with patch('app.get_db_user_attributes',
+                           self.mock_db_get_user_attributes):
+
                     actual_result = get_profile_from_db(test_param[KEY_INPUT])
                     expected_result = test_param[KEY_EXPECTED]
                     self.assertEqual(len(actual_result), len(expected_result))
-                    self.assertEqual(actual_result['error'], expected_result['error'])
+                    self.assertEqual(actual_result['error'],
+                                     expected_result['error'])
                     self.assertDictEqual(actual_result, expected_result)
-
-
-
 
 
 if __name__ == '__main__':

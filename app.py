@@ -213,11 +213,6 @@ def do_match_function(name1, name2):
     match_info['percentage'] = newpercent
     match_info['email'] = name2['email']
 
-    #print(newpercent)
-    # if (mock_percentage < int(newpercent)):
-    #     mock_percentage = int(newpercent)
-    #     print("this is current mock percent")
-    #     print(str(mock_percentage))
     return match_info
 
 

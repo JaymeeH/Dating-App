@@ -23,14 +23,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     # Gets rid of a warning
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
+    if __name__ == '__main__':
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
     return app
 
 
-if __name__ == '__main__':
-    app = create_app()
+app = create_app()
 '''
 
 love calculator api 
@@ -225,20 +225,11 @@ def get_profile_from_db(email):
     '''
     Given an email return a dictionary of their profile info
     '''
-    db_user = UserProfile.query.filter_by(email=email).first()
+    db_user = mock_out_query(email)
     if db_user is None:
         return {'error': True}
     else:
-        return {
-            'error': False,
-            'email': email,
-            'oath_name': db_user.oath_name,
-            'nickname': db_user.nickname,
-            'age': db_user.age,
-            'gender': db_user.gender,
-            'bio': db_user.bio,
-            'image_url': db_user.image_url,
-        }
+        return get_db_user_attributes(db_user)
 
 
 def update_user_data(user_data):
@@ -288,6 +279,26 @@ def add_to_db(email,
     db.session.commit()
 
 
+def mock_out_query(email):
+    '''
+    Mock out query for a profile with email
+    '''
+    return UserProfile.query.filter_by(email=email).first()
+
+
+def get_db_user_attributes(db_user):
+    return {
+            'error': False,
+            'email': db_user.email,
+            'oath_name': db_user.oath_name,
+            'nickname': db_user.nickname,
+            'age': db_user.age,
+            'gender': db_user.gender,
+            'bio': db_user.bio,
+            'image_url': db_user.image_url,
+        }
+
+
 def update_in_db(db_row, nickname, age, gender, bio):
     '''
     If a column exists in the db, update it with the parameter values,
@@ -300,8 +311,8 @@ def update_in_db(db_row, nickname, age, gender, bio):
     db.session.merge(db_row)
     db.session.commit()
 
-
-app.run(
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-)
+if __name__ == '__main__':
+    app.run(
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )

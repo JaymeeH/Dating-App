@@ -4,12 +4,12 @@ import {
 } from 'react-bootstrap';
 
 function UserProfileGrid(props) {
-  const { email } = props;
+  const { email, setMatchEmail } = props;
   return (
     <Container>
       <Row>
         <Col>
-          <UserProfileForm email={email}/>
+          <UserProfileForm email={email} setMatchEmail={setMatchEmail} />
         </Col>
       </Row>
     </Container>
@@ -23,7 +23,7 @@ function UserProfileForm(props) {
   const genderRef = useRef(null);
   const bioRef = useRef(null);
 
-  const { email } = props;
+  const { email, setMatchEmail } = props;
   const PROFILE_REQUEST_URL = '/api/v1/user_profile';
   const MATCH_URL = 'api/v1/match';
 
@@ -63,8 +63,9 @@ function UserProfileForm(props) {
       },
       body: JSON.stringify(json_packed_data)
     }).then((response) => response.json()).then((data) => {
-      console.log('All good');
       console.log(data);
+      // setMatchStatus()
+      setMatchEmail(data.email);
     });
   }
 

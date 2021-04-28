@@ -4,14 +4,14 @@ import {
 } from 'react-bootstrap';
 
 function DisplayMatchPage(props) {
-  const { email, statusState } = props;
+  const { email, setMatchEmail } = props;
   // Place the chat where the empty card is currently
   return (
     <Container>
       <Row>
         <Col>
           <Accordion defaultActiveKey="0">
-            <MatchProfileShell email={email} statusState={statusState} />
+            <MatchProfileShell email={email} setMatchEmail={setMatchEmail} />
             <FakeChatFeatureShell />
           </Accordion>
         </Col>
@@ -24,7 +24,7 @@ function MatchProfileShell(props) {
   const [name, setName] = useState('Unnamed User');
   const [age, setAge] = useState('Unknown Age');
   const [bio, setBio] = useState('No bio');
-  const { email, statusState } = props;
+  const { email, setMatchEmail } = props;
   const PROFILE_REQUEST_URL = '/api/v1/user_profile';
 
   function getProfile(email) {
@@ -58,17 +58,18 @@ function MatchProfileShell(props) {
         </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey="0">
-        <MatchProfile name={name} age={age} bio={bio} statusState={statusState}/>
+        <MatchProfile name={name} age={age} bio={bio} setMatchEmail={setMatchEmail}/>
       </Accordion.Collapse>
     </Card>
   );
 }
 
 function MatchProfile(props) {
-  const { name, age, bio, statusState } = props;
+  const { name, age, bio, setMatchEmail } = props;
   
-  function unmatchFunction(changeStatus) {
-    
+  function unmatchFunction() {
+    // Later: change match status in DB, add current email as already matched
+    setMatchEmail('');
   }
   
   return (
@@ -83,7 +84,7 @@ function MatchProfile(props) {
       <Card.Text sm={4}>
         {bio}
       </Card.Text>
-      <Button variant='danger' onClick={() => unmatchFunction(statusState)}>
+      <Button variant='danger' onClick={() => unmatchFunction()}>
         Unmatch
       </Button>
     </Card.Body>

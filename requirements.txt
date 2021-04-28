@@ -1,7 +1,6 @@
 Flask
 flask_socketio
 flask_cors
-astroid==2.3.0
 awscli==1.18.217
 backcall==0.2.0
 bidict==0.21.2

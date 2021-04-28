@@ -36,7 +36,7 @@ function App() {
               <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
                 logState={LogState} logSetter={setLogState} 
                 Id={ifNJIT} setId={setIfNJIT}/>
-              <Logout />
+              <Logout logState={LogState} logSetter={setLogState}/>
             </div>
             }>
           </Route>

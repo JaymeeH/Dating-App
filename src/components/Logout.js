@@ -6,9 +6,10 @@ require('dotenv').config()
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
-const Logout = () => {
+const Logout = (props) => {
     const onSuccess = () => {
       alert('Logout made successfully ✌ ') ;
+      props.logSetter=(false)
     };
     
     return(

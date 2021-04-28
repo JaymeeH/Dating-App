@@ -114,7 +114,7 @@ mock_male_list = [{
 
 mock_female_list = [{
     'name': 'Tester',
-    'email': 'tester@njit.edu'
+    'email': 'test@njit.edu'
 }]
 
 

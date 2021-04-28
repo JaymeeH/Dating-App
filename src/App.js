@@ -27,7 +27,7 @@ function App() {
   return (
     <div>
     {isLoggedIn() && matchEmail !== '' &&
-      <DisplayMatchPage email='test@njit.edu'/>
+      <DisplayMatchPage email={matchEmail} setMatchEmail={setMatchEmail}/>
     }
     {isLoggedIn() && matchEmail === '' &&
         <UserProfileGrid email={Email} setMatchEmail={setMatchEmail} />

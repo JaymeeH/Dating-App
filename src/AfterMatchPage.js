@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Accordion, Card, Button } from 'react-bootstrap';
+import { Accordion, Card, Button, Container, Row, Col } from 'react-bootstrap';
 
 
 function DisplayMatchPage(props) {
@@ -7,32 +7,49 @@ function DisplayMatchPage(props) {
   // Place the chat where the empty card is currently
   return (
     <Accordion defaultActiveKey='0'>
-      <MatchProfile />
-      <FakeChatFeature />
+      <MatchProfileShell />
+      <FakeChatFeatureShell />
     </Accordion>
   );
 }
 
 
-function MatchProfile(props) {
+function MatchProfileShell(props) {
   return (
-    <Card className="mt-5">
-        <Card.Header className='justify-content-md-center'>
+    <Card className="text-center">
+        <Card.Header>
           <Accordion.Toggle as={Card.Header} eventKey="0">
             Meet UserName
           </Accordion.Toggle>
         </Card.Header>
           <Accordion.Collapse eventKey="0">
-            <Card.Body>Text Goes Here</Card.Body>
+            <MatchProfile />
           </Accordion.Collapse>
       </Card>
   );
 }
 
 
-function FakeChatFeature(props) {
+function MatchProfile(props) {
   return (
-    <Card className="mt-0">
+    <Card.Body>
+      <Card.Title>
+        NickName, Age
+      </Card.Title>
+      <Card.Title>
+        A Little Bit About Me
+      </Card.Title>
+      <Card.Text sm={4}>
+        Body with a lot of stuff in it because I want to test to see if it automatically wraps down so this looks somewhat decent lets keep writing something here ok
+      </Card.Text>
+    </Card.Body>
+  );
+}
+
+
+function FakeChatFeatureShell(props) {
+  return (
+    <Card className="text-center">
         <Card.Header>
           <Accordion.Toggle as={Card.Header} eventKey="1">
             Chat

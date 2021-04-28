@@ -4,14 +4,14 @@ import {
 } from 'react-bootstrap';
 
 function DisplayMatchPage(props) {
-  const { email } = props;
+  const { email, statusState } = props;
   // Place the chat where the empty card is currently
   return (
     <Container>
       <Row>
         <Col>
           <Accordion defaultActiveKey="0">
-            <MatchProfileShell email={email} />
+            <MatchProfileShell email={email} statusState={statusState} />
             <FakeChatFeatureShell />
           </Accordion>
         </Col>
@@ -24,7 +24,7 @@ function MatchProfileShell(props) {
   const [name, setName] = useState('Unnamed User');
   const [age, setAge] = useState('Unknown Age');
   const [bio, setBio] = useState('No bio');
-  const { email } = props;
+  const { email, statusState } = props;
   const PROFILE_REQUEST_URL = '/api/v1/user_profile';
 
   function getProfile(email) {
@@ -58,14 +58,19 @@ function MatchProfileShell(props) {
         </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey="0">
-        <MatchProfile name={name} age={age} bio={bio} />
+        <MatchProfile name={name} age={age} bio={bio} statusState={statusState}/>
       </Accordion.Collapse>
     </Card>
   );
 }
 
 function MatchProfile(props) {
-  const { name, age, bio } = props;
+  const { name, age, bio, statusState } = props;
+  
+  function unmatchFunction(changeStatus) {
+    
+  }
+  
   return (
     <Card.Body>
       <Image src='https://i.imgur.com/MiLY8Lq.png' roundedCircle />
@@ -78,7 +83,7 @@ function MatchProfile(props) {
       <Card.Text sm={4}>
         {bio}
       </Card.Text>
-      <Button variant='danger'>
+      <Button variant='danger' onClick={() => unmatchFunction(statusState)}>
         Unmatch
       </Button>
     </Card.Body>

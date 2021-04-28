@@ -246,7 +246,6 @@ def update_user_data(user_data):
     else:
         update_in_db(db_user, nickname, age, gender, bio)
 
-
 def add_to_db(email,
               oath_name,
               nickname=None,
@@ -279,7 +278,7 @@ def mock_out_query(email):
     Mock out query for a profile with email
     '''
     return UserProfile.query.filter_by(email=email).first()
-
+    
 
 def get_db_user_attributes(db_user):
     return {

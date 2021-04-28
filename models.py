@@ -19,7 +19,7 @@ class UserProfile(db.Model):
     bio = db.Column(db.String(2048))
     image_url = db.Column(db.String(200))
     # message_ids = db.relationship('Conversations')
-    match_status_child = db.relationship('MatchStatusTable', uselist=False, back_populates='userprofile')
+    match_status_child = db.relationship('MatchStatusTable', uselist=False)
     
     def __repr__(self):
         return '<UserProfile for {}>'.format(self.email)
@@ -43,10 +43,10 @@ class MatchStatusTable(db.Model):
     
     match_id = db.Column(db.Integer, primary_key=True)
     
-    user_email = db.Column(db.String(50), db.ForeignKey('userprofile.email'), unique=True)
+    user_email = db.Column(db.String(50), db.ForeignKey('userprofile.email'))
     user_match_status = db.Column(db.Enum(StatusEnum))
-    matched_person = db.Column(db.String(50), db.ForeignKey('userprofile.email'), unqiue=True)
-    email_parent = db.relationship('UserProfile', back_populates='matchstatustable')
+    matched_person = db.Column(db.String(50))
+    email_parent = db.relationship('UserProfile', foreign_keys = [user_email])
 
 
 '''

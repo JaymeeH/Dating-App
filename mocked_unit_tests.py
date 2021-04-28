@@ -10,15 +10,6 @@ KEY_INPUT = 'input'
 KEY_EXPECTED = 'expected'
 
 
-class TryLogin(unittest.TestCase):
-    '''
-    Test case to test the login Functionality from Login.js
-    '''
-    def setUp(self):
-        '''
-        Setup for the test case
-        '''
-        
 
 class GetProfileTest(unittest.TestCase):
     '''

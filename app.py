@@ -23,14 +23,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     # Gets rid of a warning
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
+    if __name__ == '__main__':
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
     return app
 
 
-if __name__ == '__main__':
-    app = create_app()
+app = create_app()
 '''
 
 love calculator api 
@@ -113,14 +113,8 @@ mock_male_list = [{
 }]
 
 mock_female_list = [{
-    'name': 'Jessica',
-    'email': 'jessica@njit.edu'
-}, {
-    'name': 'Jenny',
-    'email': 'jenny@njit.edu'
-}, {
-    'name': 'ChiChi',
-    'email': 'chichi@njit.edu'
+    'name': 'Tester',
+    'email': 'test@njit.edu'
 }]
 
 
@@ -131,7 +125,7 @@ def match_clicked():
     Posts the user's name and gender
     '''
     print("match clicked")
-    #request_data = request.json()
+    request_data = request.get_json()
     mock_user = {
         'name': 'Kadeem',
         'gender': 'male',
@@ -144,32 +138,23 @@ def match_clicked():
         'email': 'karen@njit.edu'
     }
 
-    #testUser = mock_user2
-    testUser = mock_user
+    testUser = request_data
     mock_percentage = 0
     mock_match = {}
 
-    if testUser['gender'] is 'male':
+    if testUser['gender'].lower() == 'male':
         rating = {}
         for name in mock_female_list:
-            #print("this is name")
-            #print(name)
             rating = do_match_function(testUser, name)
-            #print("under this")
             check_percentage = int(rating['percentage'])
-            #print(type(check_percentage))
-            #print("this is rating")
-            #print(type(rating['percentage']))
-            #print(type(mock_percentage))
             if check_percentage > mock_percentage:
                 mock_percentage = int(rating['percentage'])
                 mock_match['name'] = rating['name']
                 mock_match['email'] = rating['email']
                 mock_match['percentage'] = rating['percentage']
 
-        print("this is return match")
         print(mock_match)
-        return (mock_match)
+        return mock_match
 
     else:
         rating = {}
@@ -193,7 +178,7 @@ def match_clicked():
         print(mock_match)
         return (mock_match)
 
-    #return {'success': True}
+    return {'success': True}
 
 
 def do_match_function(name1, name2):
@@ -213,11 +198,6 @@ def do_match_function(name1, name2):
     match_info['percentage'] = newpercent
     match_info['email'] = name2['email']
 
-    #print(newpercent)
-    # if (mock_percentage < int(newpercent)):
-    #     mock_percentage = int(newpercent)
-    #     print("this is current mock percent")
-    #     print(str(mock_percentage))
     return match_info
 
 
@@ -225,20 +205,11 @@ def get_profile_from_db(email):
     '''
     Given an email return a dictionary of their profile info
     '''
-    db_user = UserProfile.query.filter_by(email=email).first()
+    db_user = mock_out_query(email)
     if db_user is None:
         return {'error': True}
     else:
-        return {
-            'error': False,
-            'email': email,
-            'oath_name': db_user.oath_name,
-            'nickname': db_user.nickname,
-            'age': db_user.age,
-            'gender': db_user.gender,
-            'bio': db_user.bio,
-            'image_url': db_user.image_url,
-        }
+        return get_db_user_attributes(db_user)
 
 
 def update_user_data(user_data):
@@ -259,7 +230,6 @@ def update_user_data(user_data):
         add_to_db(email, oath_name, nickname, age, gender, bio)
     else:
         update_in_db(db_user, nickname, age, gender, bio)
-
 
 def add_to_db(email,
               oath_name,
@@ -288,6 +258,26 @@ def add_to_db(email,
     db.session.commit()
 
 
+def mock_out_query(email):
+    '''
+    Mock out query for a profile with email
+    '''
+    return UserProfile.query.filter_by(email=email).first()
+    
+
+def get_db_user_attributes(db_user):
+    return {
+            'error': False,
+            'email': db_user.email,
+            'oath_name': db_user.oath_name,
+            'nickname': db_user.nickname,
+            'age': db_user.age,
+            'gender': db_user.gender,
+            'bio': db_user.bio,
+            'image_url': db_user.image_url,
+        }
+
+
 def update_in_db(db_row, nickname, age, gender, bio):
     '''
     If a column exists in the db, update it with the parameter values,
@@ -300,8 +290,8 @@ def update_in_db(db_row, nickname, age, gender, bio):
     db.session.merge(db_row)
     db.session.commit()
 
-
-app.run(
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-)
+if __name__ == '__main__':
+    app.run(
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )

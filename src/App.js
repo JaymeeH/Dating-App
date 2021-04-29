@@ -43,7 +43,6 @@ function App() {
           </Route>
         </Switch>
 
-      </div>
     }
     </div>
   );

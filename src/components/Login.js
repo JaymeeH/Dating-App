@@ -6,7 +6,7 @@ import { refreshTokenSetup } from '../utils/refreshToken';
 //Load the contents of .env variables
 require('dotenv').config();
 const clientId = process.env.REACT_APP_CLIENT_ID;
-console.log(clientId);
+//console.log(clientId);
 const LOGIN_URL = '/api/v1/login';
 
 

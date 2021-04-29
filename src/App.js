@@ -36,8 +36,8 @@ function App() {
       <div className="App">
         <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
           logState={LogState} logSetter={setLogState} 
-                Id={ifNJIT} setId={setIfNJIT}/>
-              <Logout />
+          Id={ifNJIT} setId={setIfNJIT}/>
+        <Logout logState={LogState} logSetter={setLogState}/>
       </div>
     }
     </div>

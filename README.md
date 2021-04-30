@@ -8,6 +8,9 @@ In order to overcome the issue
 ## Requirements
 1. `npm install`
 2. `pip install -r requirements.txt`
+3. `pip install nodejs`
+4. `npm install express`
+5. 
 
 
 ## Setup

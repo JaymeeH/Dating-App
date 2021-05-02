@@ -8,11 +8,9 @@ export const refreshTokenSetup = (res) => {
     console.log('newAuthRes:', newAuthRes);
     // saveUserToken(newAuthRes.access_token);  <-- save new token
     localStorage.setItem('authToken', newAuthRes.id_token);
-
     // Setup the other timer after the first one
     setTimeout(refreshToken, refreshTiming);
   };
-
   // Setup first refresh timer
   setTimeout(refreshToken, refreshTiming);
 };

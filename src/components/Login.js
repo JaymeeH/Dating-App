@@ -6,16 +6,12 @@ import { refreshTokenSetup } from '../utils/refreshToken';
 //Load the contents of .env variables
 require('dotenv').config();
 const clientId = process.env.REACT_APP_CLIENT_ID;
-console.log(clientId);
+//console.log(clientId);
 const LOGIN_URL = '/api/v1/login';
 
 
 
 const Login = (props) => {
-    //USE STATES TO CHECK EMAIL ADDRESS
-    //const [Email, setEmail] = useState('');
-    //const [LogState, setLogState] = useState(false);
-    //const [ifNJIT, setIfNJIT] = useState(false);
     const [fullID, setFullID] = useState('');
     
     const onSuccess = (res) => {
@@ -23,32 +19,22 @@ const Login = (props) => {
      props.setter(res.profileObj.email)
      props.logSetter(true);
      checkEmail(res);
-    alert(
-         `Logged in successfully welcome ${res.profileObj.name} `
-     ); 
-    
-     // initializing the setup  
      refreshTokenSetup(res);  
    };
-   
    const onFailure = (res) => {
        console.log('[Login failed] res:', res);
        
    };
-   
    const checkEmail = (res) => {
        const emailCopy = res.profileObj.email;
        if (emailCopy.includes('@njit.edu')) {
            props.setId(true);
-           //setIfNJIT(true);
            saveLoginData(res.profileObj.name,res.profileObj.givenName,
             res.profileObj.email,res.profileObj.image_url);
        }
        else{
            alert('You must sign in with a valid njit email')
        }
-      
-       
    };
    const saveLoginData = (name,nickname,email,image_url) => {
        const loginInfo = {
@@ -70,7 +56,7 @@ const Login = (props) => {
    //console.log(Email);
     return (
         <>
-        <div>
+        
         <GoogleLogin
     clientId={clientId}
     buttonText="Log in with NJIT"
@@ -79,14 +65,11 @@ const Login = (props) => {
     cookiePolicy={'single_host_origin'}
     style={{ marginTop: '100px' }}
     isSignedIN={true}
+    theme='dark'
     />
-    </div>
-   
-        
-        </>
-        
-        )
     
+        </>
+        )
 };
 
 export default Login;

@@ -113,14 +113,8 @@ mock_male_list = [{
 }]
 
 mock_female_list = [{
-    'name': 'Jessica',
-    'email': 'jessica@njit.edu'
-}, {
-    'name': 'Jenny',
-    'email': 'jenny@njit.edu'
-}, {
-    'name': 'ChiChi',
-    'email': 'chichi@njit.edu'
+    'name': 'Tester',
+    'email': 'test@njit.edu'
 }]
 
 
@@ -131,7 +125,7 @@ def match_clicked():
     Posts the user's name and gender
     '''
     print("match clicked")
-    #request_data = request.json()
+    request_data = request.get_json()
     mock_user = {
         'name': 'Kadeem',
         'gender': 'male',
@@ -144,32 +138,23 @@ def match_clicked():
         'email': 'karen@njit.edu'
     }
 
-    #testUser = mock_user2
-    testUser = mock_user
+    testUser = request_data
     mock_percentage = 0
     mock_match = {}
 
-    if testUser['gender'] is 'male':
+    if testUser['gender'].lower() == 'male':
         rating = {}
         for name in mock_female_list:
-            #print("this is name")
-            #print(name)
             rating = do_match_function(testUser, name)
-            #print("under this")
             check_percentage = int(rating['percentage'])
-            #print(type(check_percentage))
-            #print("this is rating")
-            #print(type(rating['percentage']))
-            #print(type(mock_percentage))
             if check_percentage > mock_percentage:
                 mock_percentage = int(rating['percentage'])
                 mock_match['name'] = rating['name']
                 mock_match['email'] = rating['email']
                 mock_match['percentage'] = rating['percentage']
 
-        print("this is return match")
         print(mock_match)
-        return (mock_match)
+        return mock_match
 
     else:
         rating = {}
@@ -193,7 +178,7 @@ def match_clicked():
         print(mock_match)
         return (mock_match)
 
-    #return {'success': True}
+    return {'success': True}
 
 
 def do_match_function(name1, name2):
@@ -246,7 +231,6 @@ def update_user_data(user_data):
     else:
         update_in_db(db_user, nickname, age, gender, bio)
 
-
 def add_to_db(email,
               oath_name,
               nickname=None,
@@ -279,7 +263,7 @@ def mock_out_query(email):
     Mock out query for a profile with email
     '''
     return UserProfile.query.filter_by(email=email).first()
-
+    
 
 def get_db_user_attributes(db_user):
     return {

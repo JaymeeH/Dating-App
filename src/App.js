@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
+import DisplayMatchPage from './AfterMatchPage';
 
 
 function App() {
@@ -20,29 +21,26 @@ function App() {
       }
     }
     return false;
-    
-    
-      };
-    
+  };
+  
+  const [matchEmail, setMatchEmail] = useState('');
   return (
-    <BrowserRouter>
-      <div>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => isLoggedIn() ? <UserProfileGrid email={Email}/> :
-            <div className="App">
-              <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
-                logState={LogState} logSetter={setLogState} 
-                Id={ifNJIT} setId={setIfNJIT}/>
-              <Logout />
-            </div>
-            }>
-          </Route>
-        </Switch>
+    <div>
+    {isLoggedIn() && matchEmail !== '' &&
+      <DisplayMatchPage email={matchEmail} setMatchEmail={setMatchEmail}/>
+    }
+    {isLoggedIn() && matchEmail === '' &&
+        <UserProfileGrid email={Email} setMatchEmail={setMatchEmail} />
+    }
+    {!isLoggedIn() &&
+      <div className="App">
+        <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
+          logState={LogState} logSetter={setLogState} 
+          Id={ifNJIT} setId={setIfNJIT}/>
+        <Logout logState={LogState} logSetter={setLogState}/>
       </div>
-    </BrowserRouter>
+    }
+    </div>
   );
 }
 

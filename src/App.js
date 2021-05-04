@@ -17,6 +17,7 @@ function App() {
     //console.log('[Login Success] currentUser:',res.profileObj );
     if(LogState){
       if(ifNJIT){
+        document.getElementById("Login").style.backgroundImage = "none";
         return Email;
       }
     }
@@ -25,7 +26,7 @@ function App() {
   
   const [matchEmail, setMatchEmail] = useState('');
   return (
-    <div>
+    <div className = "Login" id = "Login">
     {isLoggedIn() && matchEmail !== '' &&
       <DisplayMatchPage email={matchEmail} setMatchEmail={setMatchEmail}/>
     }

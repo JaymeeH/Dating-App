@@ -36,3 +36,41 @@
     transform: rotate(360deg);
   }
 }
+
+.Login{
+  background-image: url("https://pbs.twimg.com/media/DUfmDKMWAAEUglB.jpg:large");
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  background-position:center;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width:100%;
+  min-height:100%;
+}
+
+@keyframes animationTransition{
+  20%{
+    letter-spacing: 25px;
+  }
+  75%{
+    letter-spacing: 8px;
+  }
+}
+
+.Transition{
+  display: none;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  horizontal-align: middle;
+  font-size: 25px;
+  animation-name: animationTransition;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.createProfile{
+  display: inline;
+}

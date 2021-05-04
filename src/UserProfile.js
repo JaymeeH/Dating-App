@@ -49,6 +49,8 @@ function UserProfileForm(props) {
   }
 
   function findMatch(gender, name) {
+    document.getElementById("createProfile").style.display = "none";
+    transition();
     // Send to server
     const json_packed_data = {
       'name': name,
@@ -67,6 +69,10 @@ function UserProfileForm(props) {
       // setMatchStatus()
       setMatchEmail(data.email);
     });
+  }
+  function transition(){
+    console.log('transition');
+    document.getElementById("Transition").style.display = "block";
   }
 
   function loadData(userEmail) {
@@ -109,7 +115,8 @@ function UserProfileForm(props) {
   }, [email]);
 
   return (
-    <Form>
+  <div>
+    <Form className = "createProfile" id= "createProfile">
       <Form.Row className="justify-content-md-center">
         <Col xs={4}>
           <Form.Group controlId="googleName">
@@ -165,6 +172,10 @@ function UserProfileForm(props) {
         </Col>
       </Form.Row>
     </Form>
+    <div className = "Transition" id = "Transition">
+      Searching for Match
+    </div>
+  </div>
   );
 }
 

@@ -1,5 +1,8 @@
 import os
 import requests
+import database
+import app
+from models import MatchStatusTable
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -31,4 +34,15 @@ def find_best_match(name, gender, email):
     Given name, gender, and email, find and return the email
     Of the best match candidate of the opposite gender
     '''
+    
+    
     pass
+
+
+def fetch_status_from_db(gender):
+    '''
+    Query for everyone looking for a match with the gender
+    Return a list of their emails
+    '''
+    waiting_list = MatchStatusTable.query.filter_by(gender=gender, user_match_status=2)
+    return list(map(lambda entry: entry.user_email, waiting_list))

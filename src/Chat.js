@@ -36,3 +36,4 @@ const sb_chat = (props) => {
     );
 } 
 
+export default sb_chat

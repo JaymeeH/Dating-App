@@ -31,18 +31,6 @@ def create_app():
 
 
 app = create_app()
-'''
-
-love calculator api 
-
-'''
-love_calculator_url = "https://love-calculator.p.rapidapi.com/getPercentage"
-
-headers = {
-    'x-rapidapi-key': os.getenv('L_C_KEY'),
-    'x-rapidapi-host': "love-calculator.p.rapidapi.com"
-}
-
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')

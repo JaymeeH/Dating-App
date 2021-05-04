@@ -115,15 +115,17 @@ def match_clicked():
     return user_profile
 
 
-@app.route('api/v1/unmatch', methods=['POST'])
+@app.route('/api/v1/unmatch', methods=['POST'])
 def unmatch_clicked():
     '''
     REST Api for when unmatch is clicked, to update
     Each user
     '''
     request_data = request.get_json()
-    update_user_status(request_data['senders_email'], StatusEnum(1))
-    update_user_status(request_data['matchs_email'], StatusEnum(1))
+    update_user_status(request_data['email'], StatusEnum(1))
+    db_entry = MatchStatusTable.query.filter_by(user_email=request_data['email']).first()
+    other_person = db_entry.matched_person
+    update_user_status(other_person, StatusEnum(1))
     return {'success': True}
 
 

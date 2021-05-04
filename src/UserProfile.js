@@ -79,27 +79,28 @@ function UserProfileForm(props) {
         'Content-Type': 'application/json',
       },
     }).then((response) => response.json()).then((data) => {
-      console.log(data);
-      if (({}).hasOwnProperty.call(data, 'oath_name') && data.oath_name !== null) googleNameRef.current.value = data.oath_name;
-      if (({}).hasOwnProperty.call(data, 'nickname') && data.nickname !== null) nickNameRef.current.value = data.nickname;
-      if (({}).hasOwnProperty.call(data, 'age') && data.age !== null) ageRef.current.value = data.age;
-      if (({}).hasOwnProperty.call(data, 'gender') && data.gender !== null) {
-        switch (data.gender) {
-          case 'Male':
-            genderRef.current.selectedIndex = 0;
-            break;
-          case 'Female':
-            genderRef.current.selectedIndex = 1;
-            break;
-          case 'Non-Binary':
-            genderRef.current.selectedIndex = 2;
-            break;
-          default:
-            genderRef.current.selectedIndex = 0;
-            break;
+      if (googleNameRef.current !== null) {
+        if (({}).hasOwnProperty.call(data, 'oath_name') && data.oath_name !== null) googleNameRef.current.value = data.oath_name;
+        if (({}).hasOwnProperty.call(data, 'nickname') && data.nickname !== null) nickNameRef.current.value = data.nickname;
+        if (({}).hasOwnProperty.call(data, 'age') && data.age !== null) ageRef.current.value = data.age;
+        if (({}).hasOwnProperty.call(data, 'gender') && data.gender !== null) {
+          switch (data.gender) {
+            case 'Male':
+              genderRef.current.selectedIndex = 0;
+              break;
+            case 'Female':
+              genderRef.current.selectedIndex = 1;
+              break;
+            case 'Non-Binary':
+              genderRef.current.selectedIndex = 2;
+              break;
+            default:
+              genderRef.current.selectedIndex = 0;
+              break;
+          }
         }
+        if (({}).hasOwnProperty.call(data, 'bio') && data.bio !== null) bioRef.current.value = data.bio;
       }
-      if (({}).hasOwnProperty.call(data, 'bio') && data.bio !== null) bioRef.current.value = data.bio;
     });
   }
 

@@ -13,6 +13,7 @@ function App() {
   const [Email, setEmail] = useState('');
   const [LogState, setLogState] = useState(false);
   const [ifNJIT, setIfNJIT] = useState(false);
+  
   const isLoggedIn = () => {
     //console.log('[Login Success] currentUser:',res.profileObj );
     if(LogState){

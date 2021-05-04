@@ -7,7 +7,7 @@ import love_calculator
 from database import db
 from flask import Flask, send_from_directory, json, request
 from flask_cors import CORS
-from models import UserProfile, MatchStatusTable
+from models import UserProfile, MatchStatusTable, StatusEnum
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -31,18 +31,6 @@ def create_app():
 
 
 app = create_app()
-'''
-
-love calculator api 
-
-'''
-love_calculator_url = "https://love-calculator.p.rapidapi.com/getPercentage"
-
-headers = {
-    'x-rapidapi-key': os.getenv('L_C_KEY'),
-    'x-rapidapi-host': "love-calculator.p.rapidapi.com"
-}
-
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
@@ -57,12 +45,21 @@ def login():
     '''
     request_data = request.get_json()
     db_user = UserProfile.query.filter_by(email=request_data['email']).first()
+    profile_state = MatchStatusTable.query.filter_by(user_email=request_data['email']).first()
     if db_user is None:
         add_to_db(request_data['email'],
                   request_data['name'],
                   )
-    print(request_data)
-    return {'success': True}
+    
+    user_status = {}
+    if profile_state is None:
+        create_status_entry(request_data['email'], 1)
+        user_status['status'] = 1
+    else:
+        user_status = fetch_status_for_user(request_data['email'])
+    user_status['success'] = True
+    
+    return user_status
 
 
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
@@ -110,10 +107,24 @@ def match_clicked():
     print("Match Clicked")
     request_data = request.get_json()
     match_email = love_calculator.find_best_match(request_data['name'], request_data['gender'], request_data['email'])
+    update_user_status(request_data['email'], StatusEnum(3), match_email)
+    update_user_status(match_email, StatusEnum(3), request_data['email'])
     user_profile = get_profile_from_db(match_email)
     user_profile['success'] = True
     
     return user_profile
+
+
+@app.route('api/v1/unmatch', methods=['POST'])
+def unmatch_clicked():
+    '''
+    REST Api for when unmatch is clicked, to update
+    Each user
+    '''
+    request_data = request.get_json()
+    update_user_status(request_data['senders_email'], StatusEnum(1))
+    update_user_status(request_data['matchs_email'], StatusEnum(1))
+    return {'success': True}
 
 
 def get_profile_from_db(email):
@@ -204,6 +215,47 @@ def update_in_db(db_row, nickname, age, gender, bio):
     db_row.bio = bio
     db.session.merge(db_row)
     db.session.commit()
+
+
+def create_status_entry(email, state, match=None):
+    '''
+    Create a new user state entry for a user
+    '''
+    if match is None:
+        new_user = MatchStatusTable(user_email=email, user_match_status=StatusEnum(state))
+    else:
+        new_user = MatchStatusTable(user_email=email, user_match_status=StatusEnum(state), matched_person=match)
+    db.session.add(new_user)
+    db.session.commit()
+
+
+def update_user_status(email, state, matched_person=None):
+    '''
+    Update the current state of the user, adding their match if they exist
+    '''
+    
+    current_record = MatchStatusTable.query.filter_by(user_email=email).first()
+    if current_record is None:
+        create_status_entry(email, state, matched_person)
+    else:
+        current_record.user_match_status = StatusEnum(state)
+        if not (matched_person is None):
+            current_record.matched_person = matched_person
+        
+        db.session.merge(current_record)
+        db.session.commit()
+
+
+def fetch_status_for_user(email):
+    '''
+    Given an email, return a dictionary of the user status for email
+    '''
+    user_status = MatchStatusTable.query.filter_by(user_email=email).first()
+    return {
+        'status': int(user_status.user_match_status),
+        'match': user_status.matched_person
+    }
+
 
 if __name__ == '__main__':
     app.run(

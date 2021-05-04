@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import UserProfileGrid from './UserProfile';
 import DisplayMatchPage from './AfterMatchPage';
+import Chat from './Chat';
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
   };
   
   const [matchEmail, setMatchEmail] = useState('');
+  return <Chat />;
+  /*
   return (
     <div>
     {isLoggedIn() && matchEmail !== '' &&
@@ -42,6 +45,8 @@ function App() {
     }
     </div>
   );
+  */
+  
 }
 
 

@@ -14,19 +14,51 @@ const USER_ID = 'kjb45@njit.edu'
 
 const CHAT_URL = 'api/v1/chat';
 
-// The USER_ID below should be unique to your Sendbird application.
 
 
+// TODO: Step 1: Initialize the Chat SDK
 const sb_chat = (props) => {
-    // sb.connect(USER_ID, function(user, error) {
-    // if (error) {
-    //     // Handle error
-    //     console.log('sb connect error')
-    // }
-    // console.log('reached here sb connect')
-    // // The user is connected to Sendbird server.
-    // });
+    // TODO: Step 2: Connect to Sendbird serve
+     sb.connect(USER_ID, function(user, error) {
+     if (error) {
+         // Handle error
+         console.log('sb connect error')
+     }
+     console.log('reached here sb connect')
+     
+     });
     
+    // TODO: Step 3: Create a new open channel
+    sb.OpenChannel.createChannel(function(openChannel, error) {
+    if (error) {
+        // Handle error.
+    }
+});
+    // TODO:Step 4: Enter the channel
+    sb.OpenChannel.getChannel(CHANNEL_URL, function(openChannel, error) {
+        if (error) {
+        // Handle error.
+        }
+
+    // Call the instance method of the result object in the "openChannel" parameter of the callback function.
+        openChannel.enter(function(response, error) {
+            if (error) {
+            // Handle error.
+            }
+    });
+});
+    const params = new sb.UserMessageParams();
+    params.message = TEXT_MESSAGE;
+    params.data = DATA;
+    params.customType = CUSTOM_TYPE;
+    
+    openChannel.sendUserMessage(params, function(message, error) {
+        if (error) {
+     //Handle error.
+    }
+  
+  
+    //});
     console.log('reached sb_chat')
     return (
         <div className="sb_chat">

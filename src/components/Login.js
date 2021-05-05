@@ -50,7 +50,9 @@ const Login = (props) => {
            },
          body: JSON.stringify(loginInfo)  
        }).then((response)=>response.json()).then((data)=>{
-           console.log(data);
+           if (({}).hasOwnProperty.call(data, 'match') && data.status === 3) {
+               props.setMatchEmail(data.match);
+           }
        });
    };
    //console.log(Email);

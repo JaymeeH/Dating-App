@@ -13,6 +13,7 @@ function App() {
   const [Email, setEmail] = useState('');
   const [LogState, setLogState] = useState(false);
   const [ifNJIT, setIfNJIT] = useState(false);
+  
   const isLoggedIn = () => {
     //console.log('[Login Success] currentUser:',res.profileObj );
     if(LogState){
@@ -36,7 +37,7 @@ function App() {
       <div className="App">
         <Login onClick={isLoggedIn} email={Email} setter={setEmail} 
           logState={LogState} logSetter={setLogState} 
-          Id={ifNJIT} setId={setIfNJIT}/>
+          Id={ifNJIT} setId={setIfNJIT} setMatchEmail={setMatchEmail}/>
         <Logout logState={LogState} logSetter={setLogState}/>
       </div>
     }

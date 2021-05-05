@@ -58,18 +58,31 @@ function MatchProfileShell(props) {
         </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey="0">
-        <MatchProfile name={name} age={age} bio={bio} setMatchEmail={setMatchEmail}/>
+        <MatchProfile name={name} age={age} bio={bio} email={email} setMatchEmail={setMatchEmail}/>
       </Accordion.Collapse>
     </Card>
   );
 }
 
 function MatchProfile(props) {
-  const { name, age, bio, setMatchEmail } = props;
+  const { name, age, bio, email, setMatchEmail } = props;
   
   function unmatchFunction() {
     // Later: change match status in DB, add current email as already matched
-    setMatchEmail('');
+    const UNMATCH_URL = '/api/v1/unmatch';
+    const payload = {
+      'email': email
+    }
+    
+    fetch(UNMATCH_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    }).then((response) => response.json()).then((data) => {
+      setMatchEmail('');
+    });
   }
   
   return (

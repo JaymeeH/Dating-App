@@ -16,7 +16,6 @@ const USER_ID = 'kjb45@njit.edu'
 
 // const CHAT_URL = 'api/v1/chat';
 
-// The USER_ID below should be unique to your Sendbird application.
 
 function createGroupChannel(userEmailList) {
     return new Promise((resolve, reject) => {
@@ -53,13 +52,12 @@ const Chat = (props) => {
     // The user is connected to Sendbird server.
     });
     
-    console.log('reached sb_chat')
     return (
         <div className="sb_chat">
             <h1>SendBird App</h1>
             <SendbirdApp appid={APP_ID} userid={USER_ID} />
         </div>
     );
-} 
+}
 
 export default Chat;

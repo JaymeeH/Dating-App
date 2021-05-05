@@ -1,5 +1,5 @@
 import React from "react";
-import { App as SendbirdApp } from "sendbird-uikit";
+import { Channel, SendBirdProvider } from "sendbird-uikit";
 import SendBird from 'sendbird';
 import "sendbird-uikit/dist/index.css";
 import "./sb_chat.css"
@@ -27,6 +27,11 @@ function createGroupChannel(userEmailList) {
     });
 }
 
+function isNull(item) {
+    return item === null;
+}
+
+
 function getMessageHistory(channel, isInit = false) {
     if (isInit || isNull(this.previousMessageQuery)) {
       previousMessageQuery = channel.createPreviousMessageListQuery();
@@ -52,10 +57,14 @@ const Chat = (props) => {
     // The user is connected to Sendbird server.
     });
     
+    const channelUrl = createGroupChannel(['test@njit', 'test2@njit']).channel_url;
+    
     return (
         <div className="sb_chat">
             <h1>SendBird App</h1>
-            <SendbirdApp appid={APP_ID} userid={USER_ID} />
+            <SendBirdProvider appId={APP_ID} userId={USER_ID}>
+                <Channel channelUrl={channelUrl} />
+            </SendBirdProvider>
         </div>
     );
 }

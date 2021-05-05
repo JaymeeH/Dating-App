@@ -4,7 +4,6 @@ import SendBird from 'sendbird';
 import "sendbird-uikit/dist/index.css";
 import "./sb_chat.css"
 
-
 require('dotenv').config();
 const APP_ID = process.env.SEND_BIRD_ID
 console.log(APP_ID)

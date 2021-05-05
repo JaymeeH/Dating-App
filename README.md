@@ -16,6 +16,13 @@ In order to overcome the issue
 3. Create an app and generate an application key
 4. Make a .env file and put this in it `export L_C_KEY='YOUR_KEY_HERE'`
 
+## Google Login API
+1. Create a new project on the Google Cloud Platform
+2. On the GCP, Click Create credentials > OAuth client ID.
+3. Select the Web application application type.
+4. Name your OAuth 2.0 client and click Create
+5. On the command line, type `npm install react-google-login`
+
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`

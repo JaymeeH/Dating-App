@@ -8,6 +8,9 @@ In order to overcome the issue
 ## Requirements
 1. `npm install`
 2. `pip install -r requirements.txt`
+3. `pip install nodejs`
+4. `npm install express`
+5. 
 
 
 ## Setup
@@ -15,6 +18,14 @@ In order to overcome the issue
 2. Go to `https://rapidapi.com/developer/` and make a new developer account
 3. Create an app and generate an application key
 4. Make a .env file and put this in it `export L_C_KEY='YOUR_KEY_HERE'`
+
+## Google Login API
+1. Create a new project on the Google Cloud Platform
+2. On the GCP, Click Create credentials > OAuth client ID.
+3. Select the Web application application type.
+4. Name your OAuth 2.0 client and click Create
+5. On the command line, type `npm install react-google-login`
+6. 
 
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`
@@ -26,3 +37,4 @@ In order to overcome the issue
 1. Create a Heroku app: `heroku create --buildpack heroku/python`
 2. Add nodejs buildpack: `heroku buildpacks:add --index 1 heroku/nodejs`
 3. Push to Heroku: `git push heroku main`
+

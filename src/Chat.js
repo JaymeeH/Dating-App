@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Channel, SendBirdProvider } from "sendbird-uikit";
 import SendBird from 'sendbird';
 import "sendbird-uikit/dist/index.css";
 import "./sb_chat.css"
 
 
+const path = require('path');
 require('dotenv').config();
-const APP_ID = process.env.SEND_BIRD_ID
-console.log(APP_ID)
+const APP_ID = '246B5999-217E-4ED5-94DB-09F9A67541D6';
+console.log(APP_ID);
+
 
 const sb = new SendBird({appId: APP_ID});
 let previousMessageQuery = null;
@@ -48,16 +50,47 @@ function getMessageHistory(channel, isInit = false) {
 }
 
 const Chat = (props) => {
-    sb.connect(USER_ID, function(user, error) {
-        if (error) {
-         // Handle error
-         console.log('sb connect error')
-        }
-        console.log('reached here sb connect')
-    // The user is connected to Sendbird server.
-    });
+    const [channelUrl, setChannelUrl] = useState(null);
+    useEffect(() => {
+        sb.connect(USER_ID, function(user, error) {
+            if (error) {
+             // Handle error
+             console.log('sb connect error')
+            }
+            console.log('reached here sb connect')
+        // The user is connected to Sendbird server.
+        }).then(() => {
+            const CREATE_GROUP_URL = 'https://api-246B5999-217E-4ED5-94DB-09F9A67541D6.sendbird.com/v3/group_channels';
+            const payload = {
+                users: ['kjb45@njit.edu', 'test@njit']
+            };
+                
+            fetch(CREATE_GROUP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Api-Token': '0b1e360eb6ef8d56b4d32bb1458a8cf898596f31',
+                },
+                body: JSON.stringify(payload)
+            }).then((response) => response.json()).then((data) => {
+                console.log(data);
+                const FETCH_URL = 'https://api-246B5999-217E-4ED5-94DB-09F9A67541D6.sendbird.com/v3/users/kjb45@njit.edu/my_group_channels';
+                fetch(FETCH_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Api-Token': '0b1e360eb6ef8d56b4d32bb1458a8cf898596f31',
+                    },
+                }).then((response) => response.json()).then((data) => {
+                        console.log(data);
+                });
+            });
+        });
+    }, []);
     
-    const channelUrl = createGroupChannel(['test@njit', 'test2@njit']).channel_url;
+    //const channelUrl = 'a'
+    //const channelUrl = createGroupChannel(['kjb45@njit.edu', 'test2@njit']).channel_url;
+    console.log(channelUrl);
     
     return (
         <div className="sb_chat">

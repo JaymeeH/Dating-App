@@ -2,13 +2,13 @@
 Server driver code
 '''
 import os
+import requests
+import love_calculator
 from database import db
 from flask import Flask, send_from_directory, json, request
-import requests
 from flask_cors import CORS
-from models import UserProfile
+from models import UserProfile, MatchStatusTable, StatusEnum
 from dotenv import load_dotenv, find_dotenv
-import re
 
 load_dotenv(find_dotenv())
 
@@ -31,18 +31,6 @@ def create_app():
 
 
 app = create_app()
-'''
-
-love calculator api 
-
-'''
-love_calculator_url = "https://love-calculator.p.rapidapi.com/getPercentage"
-
-headers = {
-    'x-rapidapi-key': os.getenv('L_C_KEY'),
-    'x-rapidapi-host': "love-calculator.p.rapidapi.com"
-}
-
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
@@ -57,12 +45,21 @@ def login():
     '''
     request_data = request.get_json()
     db_user = UserProfile.query.filter_by(email=request_data['email']).first()
+    profile_state = MatchStatusTable.query.filter_by(user_email=request_data['email']).first()
     if db_user is None:
         add_to_db(request_data['email'],
                   request_data['name'],
                   )
-    print(request_data)
-    return {'success': True}
+    
+    user_status = {}
+    if profile_state is None:
+        create_status_entry(request_data['email'], 1)
+        user_status['status'] = 1
+    else:
+        user_status = fetch_status_for_user(request_data['email'])
+    user_status['success'] = True
+    
+    return user_status
 
 
 @app.route('/api/v1/user_profile', methods=['GET', 'POST'])
@@ -101,104 +98,35 @@ def user_profile():
     }
 
 
-mock_male_list = [{
-    'name': 'Chris',
-    'email': 'chris@njit.edu'
-}, {
-    'name': 'Michael',
-    'email': 'michael@njit.edu'
-}, {
-    'name': 'Johnny',
-    'email': 'johnny@njit.edu'
-}]
-
-mock_female_list = [{
-    'name': 'Tester',
-    'email': 'test@njit.edu'
-}]
-
-
 @app.route('/api/v1/match', methods=['POST'])
 def match_clicked():
     '''
     REST api for when match is clicked from user profile
     Posts the user's name and gender
     '''
-    print("match clicked")
+    print("Match Clicked")
     request_data = request.get_json()
-    mock_user = {
-        'name': 'Kadeem',
-        'gender': 'male',
-        'email': 'kadeem@njit.edu'
-    }
+    match_email = love_calculator.find_best_match(request_data['name'], request_data['gender'], request_data['email'])
+    update_user_status(request_data['email'], StatusEnum(3), match_email)
+    update_user_status(match_email, StatusEnum(3), request_data['email'])
+    user_profile = get_profile_from_db(match_email)
+    user_profile['success'] = True
+    
+    return user_profile
 
-    mock_user2 = {
-        'name': 'Karen',
-        'gender': 'female',
-        'email': 'karen@njit.edu'
-    }
 
-    testUser = request_data
-    mock_percentage = 0
-    mock_match = {}
-
-    if testUser['gender'].lower() == 'male':
-        rating = {}
-        for name in mock_female_list:
-            rating = do_match_function(testUser, name)
-            check_percentage = int(rating['percentage'])
-            if check_percentage > mock_percentage:
-                mock_percentage = int(rating['percentage'])
-                mock_match['name'] = rating['name']
-                mock_match['email'] = rating['email']
-                mock_match['percentage'] = rating['percentage']
-
-        print(mock_match)
-        return mock_match
-
-    else:
-        rating = {}
-        for name in mock_male_list:
-            #print("this is name")
-            #print(name)
-            rating = do_match_function(testUser, name)
-            #print("under this")
-            check_percentage = int(rating['percentage'])
-            print(type(check_percentage))
-            #print("this is rating")
-            #print(type(rating['percentage']))
-            print(type(mock_percentage))
-            if check_percentage > mock_percentage:
-                mock_percentage = int(rating['percentage'])
-                mock_match['name'] = rating['name']
-                mock_match['email'] = rating['email']
-                mock_match['percentage'] = rating['percentage']
-
-        print("this is return match")
-        print(mock_match)
-        return (mock_match)
-
+@app.route('/api/v1/unmatch', methods=['POST'])
+def unmatch_clicked():
+    '''
+    REST Api for when unmatch is clicked, to update
+    Each user
+    '''
+    request_data = request.get_json()
+    update_user_status(request_data['email'], StatusEnum(1))
+    db_entry = MatchStatusTable.query.filter_by(user_email=request_data['email']).first()
+    other_person = db_entry.matched_person
+    update_user_status(other_person, StatusEnum(1))
     return {'success': True}
-
-
-def do_match_function(name1, name2):
-    querystring = {"fname": name1['name'], "sname": name2['name']}
-    response = requests.request("GET",
-                                love_calculator_url,
-                                headers=headers,
-                                params=querystring)
-    print(response.text)
-    m = re.search('percentage.*,', response.text)
-    #print(m.group(0))
-    percent = m.group(0)
-    newpercent = percent[13:15]
-    match_info = {}
-
-    match_info['name'] = name2['name']
-    match_info['percentage'] = newpercent
-    match_info['email'] = name2['email']
-
-    return match_info
 
 
 def get_profile_from_db(email):
@@ -289,6 +217,47 @@ def update_in_db(db_row, nickname, age, gender, bio):
     db_row.bio = bio
     db.session.merge(db_row)
     db.session.commit()
+
+
+def create_status_entry(email, state, match=None):
+    '''
+    Create a new user state entry for a user
+    '''
+    if match is None:
+        new_user = MatchStatusTable(user_email=email, user_match_status=StatusEnum(state))
+    else:
+        new_user = MatchStatusTable(user_email=email, user_match_status=StatusEnum(state), matched_person=match)
+    db.session.add(new_user)
+    db.session.commit()
+
+
+def update_user_status(email, state, matched_person=None):
+    '''
+    Update the current state of the user, adding their match if they exist
+    '''
+    
+    current_record = MatchStatusTable.query.filter_by(user_email=email).first()
+    if current_record is None:
+        create_status_entry(email, state, matched_person)
+    else:
+        current_record.user_match_status = StatusEnum(state)
+        if not (matched_person is None):
+            current_record.matched_person = matched_person
+        
+        db.session.merge(current_record)
+        db.session.commit()
+
+
+def fetch_status_for_user(email):
+    '''
+    Given an email, return a dictionary of the user status for email
+    '''
+    user_status = MatchStatusTable.query.filter_by(user_email=email).first()
+    return {
+        'status': int(user_status.user_match_status),
+        'match': user_status.matched_person
+    }
+
 
 if __name__ == '__main__':
     app.run(

@@ -26,7 +26,7 @@ class UserProfile(db.Model):
 
 
 
-class StatusEnum(enum.Enum):
+class StatusEnum(enum.IntEnum):
     '''
     Enumeration of the different statuses a person can have
     '''

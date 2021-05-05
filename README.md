@@ -24,7 +24,7 @@ However, if you cannot click login go to settings->clear browsing data->cached i
 3. Select the Web application application type.
 4. Name your OAuth 2.0 client and click Create
 5. On the command line, type `npm install react-google-login`
-6. 
+6. Clear cached images and files in browser
 
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`

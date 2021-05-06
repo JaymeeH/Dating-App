@@ -7,7 +7,8 @@ import "./sb_chat.css"
 
 const path = require('path');
 require('dotenv').config();
-const APP_ID = '246B5999-217E-4ED5-94DB-09F9A67541D6';
+const APP_ID = process.env.SEND_BIRD_ID;
+const MASTER_KEY = process.env.MASTER_KEY
 console.log(APP_ID);
 
 
@@ -60,7 +61,7 @@ const Chat = (props) => {
             console.log('reached here sb connect')
         // The user is connected to Sendbird server.
         }).then(() => {
-            const CREATE_GROUP_URL = 'https://api-246B5999-217E-4ED5-94DB-09F9A67541D6.sendbird.com/v3/group_channels';
+            const CREATE_GROUP_URL = 'https://api-' + APP_ID + '.sendbird.com/v3/group_channels';
             const payload = {
                 users: ['kjb45@njit.edu', 'test@njit']
             };
@@ -69,17 +70,17 @@ const Chat = (props) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Api-Token': '0b1e360eb6ef8d56b4d32bb1458a8cf898596f31',
+                    'Api-Token': 'MASTER_KEY',
                 },
                 body: JSON.stringify(payload)
             }).then((response) => response.json()).then((data) => {
                 console.log(data);
-                const FETCH_URL = 'https://api-246B5999-217E-4ED5-94DB-09F9A67541D6.sendbird.com/v3/users/kjb45@njit.edu/my_group_channels';
+                const FETCH_URL = 'https://api-' + APP_ID +'.sendbird.com/v3/users/kjb45@njit.edu/my_group_channels';
                 fetch(FETCH_URL, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Api-Token': '0b1e360eb6ef8d56b4d32bb1458a8cf898596f31',
+                        'Api-Token': MASTER_KEY,
                     },
                 }).then((response) => response.json()).then((data) => {
                         console.log(data);

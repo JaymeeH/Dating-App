@@ -4,13 +4,12 @@
 https://linknjitsprint2.herokuapp.com/
 However, if you cannot click login go to settings->clear browsing data->cached images and files
 
-
+added env
 ## Requirements
 1. `npm install`
 2. `pip install -r requirements.txt`
 3. `pip install nodejs`
 4. `npm install express`
-5. 
 
 
 ## Setup
